@@ -210,13 +210,13 @@ Definition of done:
 - [x] Phase 4 manual sessions complete.
 - [x] Phase 5 preservation complete.
 - [x] Phase 6 restart boundaries complete.
-- [ ] Phase 7 search/export complete.
+- [x] Phase 7 search/export complete.
 - [ ] Phase 8 polish complete.
 - [ ] MVP complete.
 
 ## Current Priority Slice
 
-Current slice: Phase 7 search and export.
+Current slice: Phase 7 search and export completed; next priority is Phase 8 polish, diagnostics, and storage visibility.
 
 Scope:
 
@@ -229,7 +229,7 @@ Scope:
 - Keep result limits bounded so the browser and backend do not load unbounded log history.
 - Validate search and export behavior with backend tests and frontend build.
 - Document limitations honestly.
-- Commit and push the completed search/export slice.
+- Committed and pushed the completed search/export slice.
 
 Out of scope for this slice:
 
@@ -310,9 +310,9 @@ Out of scope for this slice:
 
 ## Upcoming Commit Targets
 
-1. Phase 7A search/export: global bounded search across rolling console, manual session copies, and preserved capture copies.
-2. Phase 7B search/export: `.txt` export for preserved captures and manual sessions.
-3. Phase 7C search/export: `.txt` export for filtered global search results.
+1. Phase 8A polish: dashboard counts, storage usage visibility, and better empty/loading/error states.
+2. Phase 8B diagnostics: backup/restore docs, clearer deployment diagnostics, and trigger rule visibility.
+3. Phase 8C polish: optional notification hooks and final MVP documentation pass.
 
 ## Validation Checklist
 
@@ -477,5 +477,5 @@ Phase 7 validation status:
 - [x] Docker Compose validation attempted.
 - [ ] Docker Compose validation passed.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
