@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 6 restart boundaries are in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, rolling watch, manual sessions, rule-triggered preserved captures, and restart/reconnect boundary markers.
+Phase 7 search and export is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, rolling watch, manual sessions, rule-triggered preserved captures, restart/reconnect boundary markers, bounded global search, and text exports.
 
 ## Planned Architecture
 
@@ -122,6 +122,17 @@ ConsoleWatch creates `restart_boundaries` records for explicit Klippy ready/shut
 
 Duplicate same-type boundaries for the same printer are suppressed within a short reconnect-storm window. Recent console and preserved capture timelines mark entries that are linked to restart boundaries.
 
+## Search and Export
+
+Global search queries rolling console entries, copied manual session entries, and copied preserved capture entries through one bounded result set. Filters include printer, text, classification, source, level, time range, and limit.
+
+Useful endpoints:
+
+- `GET /api/v1/search`
+- `GET /api/v1/exports/search.txt`
+- `GET /api/v1/exports/manual-session/{session_id}.txt`
+- `GET /api/v1/exports/preserved-capture/{capture_id}.txt`
+
 ## Validation
 
 Phase 1 local validation:
@@ -181,6 +192,15 @@ npm run build
 ```
 
 Phase 6 local validation:
+
+```powershell
+python -m compileall backend\app
+python -m pytest backend\tests
+cd frontend
+npm run build
+```
+
+Phase 7 local validation:
 
 ```powershell
 python -m compileall backend\app

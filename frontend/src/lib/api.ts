@@ -188,6 +188,30 @@ export type PreservedCaptureDetail = PreservedCapture & {
   detected_events: DetectedEvent[];
 };
 
+export type GlobalSearchResult = {
+  collection: string;
+  id: number;
+  parent_id: number | null;
+  printer_id: number;
+  printer_name: string | null;
+  captured_at: string;
+  source: string;
+  level: string;
+  classification: string;
+  message: string;
+};
+
+export type GlobalSearchFilters = {
+  printer_id?: number;
+  search?: string;
+  classification?: string;
+  source?: string;
+  level?: string;
+  start_at?: string;
+  end_at?: string;
+  limit?: number;
+};
+
 export function listPrinters() {
   return requestJson<Printer[]>("/printers");
 }
@@ -305,4 +329,24 @@ export function getPreservedCapture(id: number, filters: ManualSessionFilters = 
   });
   const query = params.toString();
   return requestJson<PreservedCaptureDetail>(`/preserved-captures/${id}${query ? `?${query}` : ""}`);
+}
+
+export function globalSearch(filters: GlobalSearchFilters = {}) {
+  const query = queryString(filters);
+  return requestJson<GlobalSearchResult[]>(`/search${query ? `?${query}` : ""}`);
+}
+
+export function exportUrl(path: string, filters: Record<string, string | number | undefined | null> = {}) {
+  const query = queryString(filters);
+  return `${API_BASE_URL}${path}${query ? `?${query}` : ""}`;
+}
+
+function queryString(filters: Record<string, string | number | undefined | null>) {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, String(value));
+    }
+  });
+  return params.toString();
 }

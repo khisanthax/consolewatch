@@ -332,6 +332,10 @@ td small {
   margin-bottom: 14px;
 }
 
+.search-filter-row {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
 .panel dl {
   display: grid;
   gap: 10px;

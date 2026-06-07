@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import {
   discardManualSession,
+  exportUrl,
   getManualSession,
   listManualSessions,
   listPrinters,
@@ -235,6 +236,13 @@ export default function ManualSessionsPage() {
             </div>
             <button type="button" className="secondary-button" onClick={() => void refreshDetail(selectedSession.id)}>
               Refresh Detail
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => window.open(exportUrl(`/exports/manual-session/${selectedSession.id}.txt`), "_blank")}
+            >
+              Export TXT
             </button>
           </div>
           <form className="filter-row" onSubmit={handleDetailFilter}>

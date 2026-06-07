@@ -216,28 +216,30 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 6 restart and firmware boundary handling completed; next priority is Phase 7 search and export.
+Current slice: Phase 7 search and export.
 
 Scope:
 
-- Create restart boundary records from Klippy ready/shutdown/disconnected events and restart-like console messages.
-- Link matching console entries to `restart_boundaries`.
-- Mark restart/reconnect boundaries in the recent console timeline.
-- Mark boundary-like events in preserved capture timelines.
-- Preserve around restart-related events through the existing Phase 5 preservation path.
-- Add duplicate suppression for repeated boundary events during reconnect storms.
-- Validate boundary creation, duplicate suppression, entry linkage, and UI-visible markers.
+- Add global bounded search across rolling console entries, manual session copies, and preserved capture copies.
+- Support search filters for printer, text, classification, level/source, and time range.
+- Add `.txt` export for preserved captures.
+- Add `.txt` export for manual sessions.
+- Add `.txt` export for filtered global search results.
+- Include printer/time/source/classification metadata in exports.
+- Keep result limits bounded so the browser and backend do not load unbounded log history.
+- Validate search and export behavior with backend tests and frontend build.
 - Document limitations honestly.
-- Committed and pushed the completed boundary slice.
+- Commit and push the completed search/export slice.
 
 Out of scope for this slice:
 
 - Full historical backfill unless current Moonraker APIs prove it is available.
-- Global search and export.
-- Exporting sessions as `.txt`.
 - Advanced configurable trigger rules.
-- Exporting captures as `.txt`.
 - Deep firmware/Moonraker causality analysis beyond explicit boundary markers.
+- `.json` exports.
+- Virtualized result rendering.
+- `.json` exports.
+- Virtualized result rendering.
 
 ## Decision Log
 
@@ -267,6 +269,9 @@ Out of scope for this slice:
 - 2026-06-07: Implemented restart boundary records for Klippy state notifications and restart-like console messages.
 - 2026-06-07: Added duplicate suppression for same-type printer boundaries within a reconnect-storm window.
 - 2026-06-07: Recent console and preserved capture timelines now expose boundary markers.
+- 2026-06-07: Started Phase 7 search and export; current priority is bounded global search and readable `.txt` exports.
+- 2026-06-07: Implemented bounded global search across rolling console entries, manual session copies, and preserved capture copies.
+- 2026-06-07: Implemented `.txt` exports for filtered search results, manual sessions, and preserved captures.
 
 ## Known Risks
 
@@ -301,6 +306,7 @@ Out of scope for this slice:
 - 2026-06-07: Implemented manual diagnostic session APIs, active entry copying, session list/detail UI, and session filtering.
 - 2026-06-07: Implemented event-triggered preserved captures, detected events, capture detail API, and preserved capture review UI.
 - 2026-06-07: Implemented restart boundary detection, entry linkage, duplicate suppression, and UI boundary markers.
+- 2026-06-07: Implemented global search API/UI and text exports for search results, manual sessions, and preserved captures.
 
 ## Upcoming Commit Targets
 
@@ -351,6 +357,7 @@ Phase 0 validation status:
 - Phase 4 manual sessions copy newly ingested entries only while active; they do not backfill older rolling entries from before the session start.
 - Phase 5 preservation copies entries currently present in rolling `console_entries`; if the rolling table was already pruned before a trigger, older pre-trigger context cannot be recovered.
 - Phase 6 boundary detection is rule-based and limited to explicit Klippy state notifications plus restart/disconnect/reconnect-like messages.
+- Phase 7 search/export is bounded by explicit limits; it is not a full unbounded archive dump.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
 
 Phase 1 validation status:
@@ -455,3 +462,20 @@ Phase 6 validation status:
 - [x] Git diff reviewed.
 - [x] Commit created.
 - [x] Commit pushed.
+
+Phase 7 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] Global bounded search API implemented.
+- [x] Global search frontend implemented.
+- [x] Filtered search `.txt` export implemented.
+- [x] Manual session `.txt` export implemented.
+- [x] Preserved capture `.txt` export implemented.
+- [x] Backend import/compile check passed.
+- [x] Backend tests passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.

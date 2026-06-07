@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import {
   getPreservedCapture,
+  exportUrl,
   listPreservedCaptures,
   listPrinters,
   PreservedCapture,
@@ -158,6 +159,13 @@ export default function PreservedCapturesPage() {
             </div>
             <button type="button" className="secondary-button" onClick={() => void refreshDetail(selectedCapture.id)}>
               Refresh Detail
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => window.open(exportUrl(`/exports/preserved-capture/${selectedCapture.id}.txt`), "_blank")}
+            >
+              Export TXT
             </button>
           </div>
 
