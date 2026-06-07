@@ -207,7 +207,7 @@ Definition of done:
 - [x] Phase 1 foundation complete.
 - [x] Phase 2 ingestion proof complete.
 - [x] Phase 3 rolling watch complete.
-- [ ] Phase 4 manual sessions complete.
+- [x] Phase 4 manual sessions complete.
 - [ ] Phase 5 preservation complete.
 - [ ] Phase 6 restart boundaries complete.
 - [ ] Phase 7 search/export complete.
@@ -216,7 +216,7 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 4 manual diagnostic sessions.
+Current slice: Phase 4 manual diagnostic sessions completed; next priority is Phase 5 event-triggered preservation.
 
 Scope:
 
@@ -228,7 +228,7 @@ Scope:
 - Show session duration, printer name, status, notes, and copied entries.
 - Validate saved sessions surviving rolling pruning with backend tests.
 - Document any limitations honestly.
-- Commit and push the completed manual-session slice.
+- Committed and pushed the completed manual-session slice.
 
 Out of scope for this slice:
 
@@ -295,9 +295,9 @@ Out of scope for this slice:
 
 ## Upcoming Commit Targets
 
-1. Phase 4A manual sessions: start/stop session API and active session entry copying.
-2. Phase 4B manual sessions: save/discard session behavior and session list UI.
-3. Phase 4C manual sessions: session detail view with bounded search/filtering.
+1. Phase 5A preservation: rule-based trigger engine and detected events table writes.
+2. Phase 5B preservation: preserve 30 minutes before and after trigger using copied rows.
+3. Phase 5C preservation: preserved captures list/detail UI with trigger marker.
 
 ## Validation Checklist
 
@@ -405,5 +405,5 @@ Phase 4 validation status:
 - [x] Docker Compose validation attempted.
 - [ ] Docker Compose validation passed.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
