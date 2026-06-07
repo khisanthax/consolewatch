@@ -204,7 +204,7 @@ Definition of done:
 - [x] Phase 0 scaffold created.
 - [x] Phase 0 scaffold committed.
 - [x] Phase 0 scaffold pushed.
-- [ ] Phase 1 foundation complete.
+- [x] Phase 1 foundation complete.
 - [ ] Phase 2 ingestion proof complete.
 - [ ] Phase 3 rolling watch complete.
 - [ ] Phase 4 manual sessions complete.
@@ -216,22 +216,27 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 0 initial scaffold.
+Current slice: Phase 1 foundation.
 
 Scope:
 
-- Establish the repo structure.
-- Document the roadmap and persistence decisions.
-- Add minimal backend/frontend files that make the intended architecture clear.
-- Commit and push the scaffold.
+- Add SQLite models and bootstrap for the initial ConsoleWatch tables.
+- Implement printer profile CRUD in the backend API.
+- Build a frontend printer management page that can create, edit, delete, and display saved printers.
+- Keep Moonraker API keys server-side and never return them in printer API responses.
+- Use timezone-aware UTC timestamps from the API and browser-local formatting in the frontend.
+- Validate backend imports/API behavior, frontend production build, and Docker Compose build path.
+- Commit and push the completed foundation slice.
 
 Out of scope for this slice:
 
-- Printer CRUD.
 - Moonraker websocket connection.
 - Console ingestion.
-- Persistence models beyond placeholders.
-- Production validation of Docker builds.
+- Rolling retention and pruning behavior.
+- Manual diagnostic sessions.
+- Event-preserved incident captures.
+- Restart/reconnect boundary detection.
+- Global search and export.
 
 ## Decision Log
 
@@ -241,6 +246,8 @@ Out of scope for this slice:
 - 2026-06-07: Keep Moonraker API behavior unimplemented until Phase 2 verification; do not claim historical backfill support yet.
 - 2026-06-07: Use copied rows for saved manual sessions and preserved captures unless a safer design is later proven.
 - 2026-06-07: Configure nginx to avoid stale `index.html` caching from the first scaffold.
+- 2026-06-07: Started Phase 1 foundation with printer CRUD as the first persistent user-facing behavior.
+- 2026-06-07: Docker Compose validation could not run locally because the `docker` CLI is not available on PATH in this shell.
 
 ## Known Risks
 
@@ -265,13 +272,15 @@ Out of scope for this slice:
 - 2026-06-07: Created initial roadmap with product concepts, architecture, data model plan, phases, risks, and current slice.
 - 2026-06-07: Created initial backend/frontend/docs scaffold files.
 - 2026-06-07: Pushed initial Phase 0 scaffold to GitHub.
+- 2026-06-07: Implemented initial SQLite table bootstrap for printers, console entries, manual sessions, preserved captures, detected events, and restart boundaries.
+- 2026-06-07: Implemented printer profile CRUD API with API keys accepted server-side but excluded from responses.
+- 2026-06-07: Implemented frontend printer management with create, edit, delete, retention selector, watch toggle, backend health, and local timestamp formatting.
 
 ## Upcoming Commit Targets
 
-1. Phase 0 scaffold: roadmap, README, `.env.example`, Docker Compose, backend skeleton, frontend skeleton.
-2. Phase 1A foundation: SQLAlchemy database bootstrap and printer model/schema.
-3. Phase 1B foundation: printer CRUD API and frontend printer management page.
-4. Phase 1C foundation: Docker build validation and frontend health/API smoke path.
+1. Phase 2A ingestion proof: Moonraker client investigation and documented notification/source support.
+2. Phase 2B ingestion proof: store mocked or verified Moonraker console messages and show recent entries.
+3. Phase 3A rolling watch: enable background ingestion for saved printers and bounded recent-entry UI.
 
 ## Validation Checklist
 
@@ -309,6 +318,21 @@ Phase 0 validation status:
 
 - No Moonraker API behavior has been verified yet.
 - Historical console backfill support is unknown.
-- Docker builds have not been validated yet in Phase 0.
-- The current backend/frontend are scaffolds only and do not yet implement printer CRUD or persistence.
+- Docker builds have not been validated yet because the local `docker` CLI is unavailable in this shell.
+- Moonraker connectivity and connection testing are not implemented until Phase 2.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
+
+Phase 1 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] SQLite models/bootstrap implemented.
+- [x] Printer profile CRUD API implemented.
+- [x] Frontend printer management implemented.
+- [x] Backend import/compile check passed.
+- [x] Backend printer CRUD API test passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.

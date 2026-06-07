@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 0 scaffold is in progress. The repo currently contains the roadmap, Docker Compose skeleton, backend skeleton, frontend skeleton, and deployment notes. Printer CRUD, Moonraker ingestion, rolling retention, manual sessions, and preserved captures are planned but not implemented yet.
+Phase 1 foundation is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, and a frontend printer management page. Moonraker ingestion, rolling retention, manual sessions, and preserved captures are planned but not implemented yet.
 
 ## Planned Architecture
 
@@ -72,3 +72,24 @@ ConsoleWatch is designed as a local-first tool for a trusted LAN. Do not expose 
 ## Moonraker API Limitations
 
 Moonraker websocket notifications and log endpoints have not yet been verified in this project. ConsoleWatch will not assume full historical backfill support unless Phase 2 proves it. The app should remain useful even if it can only record from the time it is connected.
+
+## Validation
+
+Phase 1 local validation:
+
+```powershell
+python -m compileall backend\app
+pip install -e backend[test]
+python -m pytest backend\tests
+cd frontend
+npm run build
+```
+
+Docker Compose validation is expected with:
+
+```powershell
+docker compose config
+docker compose build
+```
+
+On the current development machine, the Docker CLI was not available on PATH, so the Docker build path could not be executed locally.

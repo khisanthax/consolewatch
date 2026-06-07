@@ -97,6 +97,13 @@ a {
   gap: 16px;
 }
 
+.split-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
 .panel {
   border: 1px solid #d8ded5;
   border-radius: 8px;
@@ -114,6 +121,136 @@ a {
   margin: 0;
   color: #3b473f;
   line-height: 1.55;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.panel-heading h3 {
+  margin: 0;
+}
+
+.form-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.form-panel label {
+  display: grid;
+  gap: 6px;
+  color: #3b473f;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid #cdd5cb;
+  border-radius: 6px;
+  padding: 10px 11px;
+  background: #ffffff;
+  color: #17201b;
+  font: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid #7a987f;
+  outline-offset: 1px;
+}
+
+.toggle-row {
+  display: grid;
+  gap: 8px;
+}
+
+.toggle-row label {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.toggle-row input {
+  width: auto;
+}
+
+.button-row,
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 13px;
+  background: #1f5e3d;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.secondary-button {
+  border: 1px solid #cdd5cb;
+  background: #f7f9f5;
+  color: #253129;
+}
+
+.danger-button {
+  background: #a82020;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e1e6df;
+  padding: 11px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #5c6b60;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+td small {
+  display: block;
+  margin-top: 4px;
+  color: #69776c;
+  font-size: 0.8rem;
+}
+
+.pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: #e9efe7;
+  color: #314338;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .panel dl {
@@ -144,6 +281,10 @@ a {
 
 @media (max-width: 760px) {
   .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .split-layout {
     grid-template-columns: 1fr;
   }
 

@@ -10,3 +10,7 @@ export function formatLocalDateTime(value: string | Date): string {
     timeZone
   }).format(date);
 }
+
+export function formatOptionalLocalDateTime(value: string | null): string {
+  return value ? formatLocalDateTime(value) : "Never";
+}
