@@ -208,7 +208,7 @@ Definition of done:
 - [x] Phase 2 ingestion proof complete.
 - [x] Phase 3 rolling watch complete.
 - [x] Phase 4 manual sessions complete.
-- [ ] Phase 5 preservation complete.
+- [x] Phase 5 preservation complete.
 - [ ] Phase 6 restart boundaries complete.
 - [ ] Phase 7 search/export complete.
 - [ ] Phase 8 polish complete.
@@ -216,7 +216,7 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 5 event-triggered preservation.
+Current slice: Phase 5 event-triggered preservation completed; next priority is Phase 6 restart and firmware boundary handling.
 
 Scope:
 
@@ -230,7 +230,7 @@ Scope:
 - Build frontend preserved capture list and detail review with trigger marker.
 - Validate trigger creation, copied preservation, duplicate-window extension, and pruning survival.
 - Document limitations honestly.
-- Commit and push the completed preservation slice.
+- Committed and pushed the completed preservation slice.
 
 Out of scope for this slice:
 
@@ -302,9 +302,9 @@ Out of scope for this slice:
 
 ## Upcoming Commit Targets
 
-1. Phase 5A preservation: rule-based trigger engine and detected events table writes.
-2. Phase 5B preservation: preserve 30 minutes before and after trigger using copied rows.
-3. Phase 5C preservation: preserved captures list/detail UI with trigger marker.
+1. Phase 6A boundaries: create restart boundary records from Klippy state and restart-like console events.
+2. Phase 6B boundaries: mark restart/reconnect boundaries in recent console and preserved capture timelines.
+3. Phase 6C boundaries: improve duplicate handling around reconnect storms.
 
 ## Validation Checklist
 
@@ -432,5 +432,5 @@ Phase 5 validation status:
 - [x] Docker Compose validation attempted.
 - [ ] Docker Compose validation passed.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
