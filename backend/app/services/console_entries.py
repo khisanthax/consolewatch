@@ -9,6 +9,7 @@ from app.models.entities import ConsoleEntry, Printer
 from app.schemas.console import MoonrakerNotificationIn
 from app.services.classification import classify_message, level_for_message
 from app.services.manual_sessions import copy_entry_to_active_sessions
+from app.services.preservation import process_entry_for_preservation
 
 
 def list_recent_entries(
@@ -58,6 +59,7 @@ def ingest_moonraker_notification(
         for entry in entries:
             db.refresh(entry)
             copy_entry_to_active_sessions(db, entry)
+            process_entry_for_preservation(db, entry)
         db.commit()
 
     return entries

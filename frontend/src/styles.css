@@ -301,6 +301,17 @@ td small {
   white-space: pre-wrap;
 }
 
+.trigger-row {
+  background: #fff6db;
+}
+
+.event-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
 .console-layout {
   grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
 }

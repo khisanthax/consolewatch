@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 4 manual sessions are in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, a bounded recent console page, background watch management for watch-enabled printers, rolling retention pruning, and manual diagnostic sessions. Preserved captures are planned but not implemented yet.
+Phase 5 event preservation is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, a bounded recent console page, background watch management for watch-enabled printers, rolling retention pruning, manual diagnostic sessions, and rule-triggered preserved captures.
 
 ## Planned Architecture
 
@@ -105,6 +105,17 @@ Useful endpoints:
 - `POST /api/v1/sessions/{session_id}/save`
 - `DELETE /api/v1/sessions/{session_id}`
 
+## Preserved Captures
+
+Rule-triggered preservation creates a `preserved_console_captures` row when an error-like console entry or state event matches an explicit trigger rule. ConsoleWatch copies rolling entries from 30 minutes before the trigger through 30 minutes after the trigger into `preserved_console_entries`, marks the trigger entry, and records a `detected_events` row.
+
+If another trigger occurs during an active capture window for the same printer, the existing capture is extended instead of creating a duplicate capture.
+
+Useful endpoints:
+
+- `GET /api/v1/preserved-captures`
+- `GET /api/v1/preserved-captures/{capture_id}`
+
 ## Validation
 
 Phase 1 local validation:
@@ -146,6 +157,15 @@ npm run build
 ```
 
 Phase 4 local validation:
+
+```powershell
+python -m compileall backend\app
+python -m pytest backend\tests
+cd frontend
+npm run build
+```
+
+Phase 5 local validation:
 
 ```powershell
 python -m compileall backend\app

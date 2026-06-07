@@ -134,6 +134,58 @@ export type ManualSessionFilters = {
   limit?: number;
 };
 
+export type PreservedEntry = {
+  id: number;
+  preserved_capture_id: number;
+  original_console_entry_id: number | null;
+  captured_at: string;
+  source: string;
+  level: string;
+  message: string;
+  raw_payload_json: string | null;
+  classification: string;
+  event_type: string | null;
+  print_state: string | null;
+  filename: string | null;
+  is_trigger_entry: boolean;
+  created_at: string;
+};
+
+export type DetectedEvent = {
+  id: number;
+  printer_id: number;
+  captured_at: string;
+  event_type: string;
+  severity: string;
+  message: string;
+  related_capture_id: number | null;
+  related_session_id: number | null;
+  restart_boundary_id: number | null;
+  created_at: string;
+};
+
+export type PreservedCapture = {
+  id: number;
+  printer_id: number;
+  printer_name: string | null;
+  trigger_type: string;
+  trigger_reason: string;
+  trigger_message: string;
+  triggered_at: string;
+  started_at: string;
+  ended_at: string;
+  status: string;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  entry_count: number;
+};
+
+export type PreservedCaptureDetail = PreservedCapture & {
+  entries: PreservedEntry[];
+  detected_events: DetectedEvent[];
+};
+
 export function listPrinters() {
   return requestJson<Printer[]>("/printers");
 }
@@ -161,7 +213,7 @@ export function deletePrinter(id: number) {
 export function listConsoleEntries(filters: ConsoleEntryFilters = {}) {
   const params = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
+    if (value !== undefined && value !== null) {
       params.set(key, String(value));
     }
   });
@@ -229,4 +281,26 @@ export function discardManualSession(id: number) {
   return requestJson<void>(`/sessions/${id}`, {
     method: "DELETE"
   });
+}
+
+export function listPreservedCaptures(filters: { printer_id?: number; limit?: number } = {}) {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      params.set(key, String(value));
+    }
+  });
+  const query = params.toString();
+  return requestJson<PreservedCapture[]>(`/preserved-captures${query ? `?${query}` : ""}`);
+}
+
+export function getPreservedCapture(id: number, filters: ManualSessionFilters = {}) {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, String(value));
+    }
+  });
+  const query = params.toString();
+  return requestJson<PreservedCaptureDetail>(`/preserved-captures/${id}${query ? `?${query}` : ""}`);
 }

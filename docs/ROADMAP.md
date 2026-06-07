@@ -216,28 +216,31 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 4 manual diagnostic sessions completed; next priority is Phase 5 event-triggered preservation.
+Current slice: Phase 5 event-triggered preservation.
 
 Scope:
 
-- Implement manual diagnostic session start/stop behavior per printer.
-- Copy newly ingested console entries into active manual sessions so saved sessions survive rolling pruning.
-- Support save and discard for completed sessions.
-- Add session list and detail APIs with bounded entry search/filtering.
-- Build frontend session controls for start, stop, save, discard, list, and detail review.
-- Show session duration, printer name, status, notes, and copied entries.
-- Validate saved sessions surviving rolling pruning with backend tests.
-- Document any limitations honestly.
-- Committed and pushed the completed manual-session slice.
+- Add an explicit rule-based trigger engine for error-like console entries and Klippy state events.
+- Write detected events when trigger rules match.
+- Create preserved captures with a 30-minute before/after window around the trigger.
+- Extend an active capture when another trigger arrives during its post-window.
+- Copy rolling console entries into preserved capture rows so preserved captures survive rolling pruning.
+- Mark the trigger entry in copied preserved entries.
+- Add preserved captures list/detail APIs with bounded filters.
+- Build frontend preserved capture list and detail review with trigger marker.
+- Validate trigger creation, copied preservation, duplicate-window extension, and pruning survival.
+- Document limitations honestly.
+- Commit and push the completed preservation slice.
 
 Out of scope for this slice:
 
-- Event-preserved incident captures.
 - Restart/reconnect boundary detection.
 - Full historical backfill unless current Moonraker APIs prove it is available.
 - Global search and export.
 - Reconnect storm suppression beyond a single task per watched printer and reconnect delay.
 - Exporting sessions as `.txt`.
+- Advanced configurable trigger rules.
+- Exporting captures as `.txt`.
 
 ## Decision Log
 
@@ -260,6 +263,9 @@ Out of scope for this slice:
 - 2026-06-07: Started Phase 4 manual diagnostic sessions; current priority is active session recording with copied entry rows.
 - 2026-06-07: Implemented manual session start/stop/save/discard behavior and copied active-session entries from newly ingested console entries.
 - 2026-06-07: Saved manual sessions use copied rows in `manual_session_entries`, so they survive rolling pruning of `console_entries`.
+- 2026-06-07: Started Phase 5 event-triggered preservation; current priority is explicit trigger rules and copied preserved capture rows.
+- 2026-06-07: Implemented explicit trigger rules for error-like console entries and Klippy state events.
+- 2026-06-07: Implemented detected events, preserved capture creation/extension, copied preserved entries, and trigger-entry marking.
 
 ## Known Risks
 
@@ -292,6 +298,7 @@ Out of scope for this slice:
 - 2026-06-07: Implemented bounded recent console API and frontend console review page with mock notification ingestion.
 - 2026-06-07: Implemented rolling watch background manager, retention pruning, watch status/prune APIs, and live console watch status UI.
 - 2026-06-07: Implemented manual diagnostic session APIs, active entry copying, session list/detail UI, and session filtering.
+- 2026-06-07: Implemented event-triggered preserved captures, detected events, capture detail API, and preserved capture review UI.
 
 ## Upcoming Commit Targets
 
@@ -340,6 +347,7 @@ Phase 0 validation status:
 - The mock ingest endpoint is for Phase 2 validation and may be replaced or gated before broader deployment.
 - Phase 3 background watch behavior is validated at service/API level, not against a live Moonraker websocket.
 - Phase 4 manual sessions copy newly ingested entries only while active; they do not backfill older rolling entries from before the session start.
+- Phase 5 preservation copies entries currently present in rolling `console_entries`; if the rolling table was already pruned before a trigger, older pre-trigger context cannot be recovered.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
 
 Phase 1 validation status:
@@ -407,3 +415,22 @@ Phase 4 validation status:
 - [x] Git diff reviewed.
 - [x] Commit created.
 - [x] Commit pushed.
+
+Phase 5 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] Rule-based trigger engine implemented.
+- [x] Detected events writes implemented.
+- [x] Preserved capture create/extend behavior implemented.
+- [x] Preserved entry copying and trigger marker implemented.
+- [x] Preserved captures list/detail API implemented.
+- [x] Preserved captures frontend implemented.
+- [x] Preservation survives rolling pruning test passed.
+- [x] Backend import/compile check passed.
+- [x] Backend tests passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.
