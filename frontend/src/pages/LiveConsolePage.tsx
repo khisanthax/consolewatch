@@ -2,10 +2,13 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import {
   ConsoleEntry,
+  getWatchStatus,
   ingestMoonrakerNotification,
   listConsoleEntries,
   listPrinters,
-  Printer
+  Printer,
+  pruneWatchEntries,
+  WatchStatus
 } from "../lib/api";
 import { formatLocalDateTime } from "../lib/time";
 
@@ -29,6 +32,9 @@ export default function LiveConsolePage() {
   const [level, setLevel] = useState("");
   const [limit, setLimit] = useState(100);
   const [mockPayload, setMockPayload] = useState(sampleNotification);
+  const [watchStatus, setWatchStatus] = useState<WatchStatus | null>(null);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [lastPruneResult, setLastPruneResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,6 +65,14 @@ export default function LiveConsolePage() {
     }
   }
 
+  async function refreshWatchStatus() {
+    try {
+      setWatchStatus(await getWatchStatus());
+    } catch {
+      setWatchStatus(null);
+    }
+  }
+
   useEffect(() => {
     listPrinters()
       .then((result) => {
@@ -74,7 +88,20 @@ export default function LiveConsolePage() {
 
   useEffect(() => {
     void refreshEntries();
+    void refreshWatchStatus();
   }, [selectedPrinterId, classification, source, level, limit]);
+
+  useEffect(() => {
+    if (!autoRefresh) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      void refreshEntries();
+      void refreshWatchStatus();
+    }, 5000);
+    return () => window.clearInterval(intervalId);
+  }, [autoRefresh, selectedPrinterId, search, classification, source, level, limit]);
 
   async function handleSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -98,6 +125,18 @@ export default function LiveConsolePage() {
     }
   }
 
+  async function handlePrune() {
+    setError(null);
+    try {
+      const result = await pruneWatchEntries();
+      setLastPruneResult(`Deleted ${result.deleted_total} rolling entries`);
+      await refreshEntries();
+      await refreshWatchStatus();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to prune rolling entries");
+    }
+  }
+
   return (
     <section className="page">
       <header>
@@ -107,6 +146,37 @@ export default function LiveConsolePage() {
 
       <div className="split-layout console-layout">
         <div className="panel form-panel">
+          <div className="watch-summary">
+            <h3>Rolling watch</h3>
+            <dl>
+              <div>
+                <dt>Worker</dt>
+                <dd>{watchStatus?.background_watch_enabled ? "Enabled" : "Disabled"}</dd>
+              </div>
+              <div>
+                <dt>Watched printers</dt>
+                <dd>{watchStatus?.watched_printer_count ?? 0}</dd>
+              </div>
+              <div>
+                <dt>Active tasks</dt>
+                <dd>{watchStatus?.task_count ?? 0}</dd>
+              </div>
+            </dl>
+            <div className="toggle-row">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={autoRefresh}
+                  onChange={(event) => setAutoRefresh(event.target.checked)}
+                />
+                <span>Auto-refresh</span>
+              </label>
+            </div>
+            <button type="button" className="secondary-button" onClick={() => void handlePrune()}>
+              Run Prune
+            </button>
+            {lastPruneResult && <p>{lastPruneResult}</p>}
+          </div>
           <h3>Filters</h3>
           <form className="form-panel nested-form" onSubmit={handleSearch}>
             <label>

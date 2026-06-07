@@ -44,6 +44,19 @@ def create_printer(client: TestClient) -> int:
     return int(response.json()["id"])
 
 
+def test_watch_status_counts_enabled_watch_printers():
+    with make_client() as client:
+        create_printer(client)
+        response = client.get("/api/v1/watch/status")
+
+        assert response.status_code == 200
+        body = response.json()
+        assert body["watched_printer_count"] == 0
+        assert body["background_watch_enabled"] is True
+
+    app.dependency_overrides.clear()
+
+
 def test_ingests_gcode_response_notification():
     with make_client() as client:
         printer_id = create_printer(client)

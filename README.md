@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 2 ingestion proof is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, and a bounded recent console page. Rolling retention, manual sessions, preserved captures, and background watch management are planned but not implemented yet.
+Phase 3 rolling watch is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, a bounded recent console page, background watch management for watch-enabled printers, and rolling retention pruning. Manual sessions and preserved captures are planned but not implemented yet.
 
 ## Planned Architecture
 
@@ -81,6 +81,17 @@ Verified from official Moonraker documentation:
 
 ConsoleWatch currently includes a Moonraker websocket client shell and a mock notification ingest endpoint for proof testing. A live printer connection was not available in this environment, so live websocket ingestion remains unverified locally. ConsoleWatch still does not assume full historical console backfill support.
 
+## Rolling Watch
+
+When `CONSOLEWATCH_BACKGROUND_WATCH_ENABLED=true`, the backend starts a rolling watch manager during FastAPI lifespan startup. It scans for printers where both `is_enabled` and `console_watch_enabled` are true, starts one websocket ingestion task per watched printer, records supported Moonraker notifications into `console_entries`, and updates printer connection status fields.
+
+Rolling pruning deletes only rows in `console_entries` older than each watched printer's `retention_hours`. Saved manual-session copy rows and preserved-capture copy rows are separate tables and are not deleted by rolling pruning.
+
+Useful endpoints:
+
+- `GET /api/v1/watch/status`
+- `POST /api/v1/watch/prune`
+
 ## Validation
 
 Phase 1 local validation:
@@ -106,6 +117,15 @@ Phase 2 local validation:
 
 ```powershell
 pip install -e backend[test]
+python -m compileall backend\app
+python -m pytest backend\tests
+cd frontend
+npm run build
+```
+
+Phase 3 local validation:
+
+```powershell
 python -m compileall backend\app
 python -m pytest backend\tests
 cd frontend

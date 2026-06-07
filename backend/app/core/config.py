@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     api_host: str = "127.0.0.1"
     api_port: int = 8000
     database_url: str = "sqlite:///./consolewatch.db"
+    background_watch_enabled: bool = True
+    watch_manager_interval_seconds: float = 5.0
     retention_prune_interval_seconds: int = 300
     moonraker_reconnect_delay_seconds: int = 5
 

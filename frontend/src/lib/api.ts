@@ -78,6 +78,18 @@ export type ConsoleEntryFilters = {
   limit?: number;
 };
 
+export type WatchStatus = {
+  active_printer_ids: number[];
+  task_count: number;
+  background_watch_enabled: boolean;
+  watched_printer_count: number;
+};
+
+export type RetentionPruneResult = {
+  deleted_by_printer: Record<string, number>;
+  deleted_total: number;
+};
+
 export function listPrinters() {
   return requestJson<Printer[]>("/printers");
 }
@@ -121,4 +133,14 @@ export function ingestMoonrakerNotification(printerId: number, payload: unknown)
       body: JSON.stringify(payload)
     }
   );
+}
+
+export function getWatchStatus() {
+  return requestJson<WatchStatus>("/watch/status");
+}
+
+export function pruneWatchEntries() {
+  return requestJson<RetentionPruneResult>("/watch/prune", {
+    method: "POST"
+  });
 }

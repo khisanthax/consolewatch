@@ -188,6 +188,11 @@ textarea {
   margin: 0;
 }
 
+.watch-summary {
+  display: grid;
+  gap: 12px;
+}
+
 .toggle-row {
   display: grid;
   gap: 8px;

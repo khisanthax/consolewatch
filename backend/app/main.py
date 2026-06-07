@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -6,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api import api_router
 from app.core.config import get_settings
 from app.db.init_db import init_db
+from app.services.runtime import rolling_watch_manager
 
 settings = get_settings()
 
@@ -13,7 +15,13 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     init_db()
-    yield
+    stop_event = asyncio.Event()
+    watch_task = asyncio.create_task(rolling_watch_manager.run(stop_event))
+    try:
+        yield
+    finally:
+        stop_event.set()
+        await watch_task
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
