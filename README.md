@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 1 foundation is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, and a frontend printer management page. Moonraker ingestion, rolling retention, manual sessions, and preserved captures are planned but not implemented yet.
+Phase 2 ingestion proof is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, and a bounded recent console page. Rolling retention, manual sessions, preserved captures, and background watch management are planned but not implemented yet.
 
 ## Planned Architecture
 
@@ -69,9 +69,17 @@ The nginx config serves `index.html` and route fallbacks with no-cache headers s
 
 ConsoleWatch is designed as a local-first tool for a trusted LAN. Do not expose it directly to the public internet. Moonraker API keys, when implemented, must remain server-side and must not be bundled into frontend assets.
 
-## Moonraker API Limitations
+## Moonraker API Notes
 
-Moonraker websocket notifications and log endpoints have not yet been verified in this project. ConsoleWatch will not assume full historical backfill support unless Phase 2 proves it. The app should remain useful even if it can only record from the time it is connected.
+Verified from official Moonraker documentation:
+
+- Websocket connections are required for server-generated events such as gcode responses.
+- `notify_gcode_response` forwards Klippy gcode responses over the websocket.
+- `notify_klippy_ready`, `notify_klippy_shutdown`, and `notify_klippy_disconnected` report Klippy state boundaries.
+- `notify_status_update` reports subscribed Klipper object status updates.
+- `printer.objects.subscribe` can subscribe a websocket connection to objects such as `webhooks` and `print_stats`.
+
+ConsoleWatch currently includes a Moonraker websocket client shell and a mock notification ingest endpoint for proof testing. A live printer connection was not available in this environment, so live websocket ingestion remains unverified locally. ConsoleWatch still does not assume full historical console backfill support.
 
 ## Validation
 
@@ -93,3 +101,13 @@ docker compose build
 ```
 
 On the current development machine, the Docker CLI was not available on PATH, so the Docker build path could not be executed locally.
+
+Phase 2 local validation:
+
+```powershell
+pip install -e backend[test]
+python -m compileall backend\app
+python -m pytest backend\tests
+cd frontend
+npm run build
+```

@@ -149,7 +149,8 @@ a {
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
   border: 1px solid #cdd5cb;
   border-radius: 6px;
@@ -160,9 +161,31 @@ select {
 }
 
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   outline: 2px solid #7a987f;
   outline-offset: 1px;
+}
+
+textarea {
+  min-height: 160px;
+  resize: vertical;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.86rem;
+}
+
+.nested-form {
+  border-top: 1px solid #e1e6df;
+  padding-top: 14px;
+}
+
+.nested-form:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.mock-form h3 {
+  margin: 0;
 }
 
 .toggle-row {
@@ -251,6 +274,30 @@ td small {
   color: #314338;
   font-size: 0.8rem;
   font-weight: 700;
+}
+
+.level-error {
+  background: #f7dddd;
+  color: #8d1717;
+}
+
+.level-warning {
+  background: #f7ebc6;
+  color: #6e5412;
+}
+
+.level-info {
+  background: #e9efe7;
+  color: #314338;
+}
+
+.message-cell {
+  max-width: 560px;
+  white-space: pre-wrap;
+}
+
+.console-layout {
+  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
 }
 
 .panel dl {

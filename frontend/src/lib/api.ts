@@ -53,6 +53,31 @@ export type PrinterPayload = {
   retention_hours: number;
 };
 
+export type ConsoleEntry = {
+  id: number;
+  printer_id: number;
+  captured_at: string;
+  source: string;
+  level: string;
+  message: string;
+  raw_payload_json: string | null;
+  classification: string;
+  event_type: string | null;
+  print_state: string | null;
+  filename: string | null;
+  restart_boundary_id: number | null;
+  created_at: string;
+};
+
+export type ConsoleEntryFilters = {
+  printer_id?: number;
+  search?: string;
+  classification?: string;
+  source?: string;
+  level?: string;
+  limit?: number;
+};
+
 export function listPrinters() {
   return requestJson<Printer[]>("/printers");
 }
@@ -75,4 +100,25 @@ export function deletePrinter(id: number) {
   return requestJson<void>(`/printers/${id}`, {
     method: "DELETE"
   });
+}
+
+export function listConsoleEntries(filters: ConsoleEntryFilters = {}) {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, String(value));
+    }
+  });
+  const query = params.toString();
+  return requestJson<ConsoleEntry[]>(`/console-entries${query ? `?${query}` : ""}`);
+}
+
+export function ingestMoonrakerNotification(printerId: number, payload: unknown) {
+  return requestJson<{ entries_created: number; entries: ConsoleEntry[] }>(
+    `/console-entries/moonraker-notification?printer_id=${printerId}`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }
+  );
 }

@@ -216,26 +216,28 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 1 foundation.
+Current slice: Phase 2 Moonraker connection and ingestion proof completed; next priority is Phase 3 rolling console watch.
 
 Scope:
 
-- Add SQLite models and bootstrap for the initial ConsoleWatch tables.
-- Implement printer profile CRUD in the backend API.
-- Build a frontend printer management page that can create, edit, delete, and display saved printers.
-- Keep Moonraker API keys server-side and never return them in printer API responses.
-- Use timezone-aware UTC timestamps from the API and browser-local formatting in the frontend.
-- Validate backend imports/API behavior, frontend production build, and Docker Compose build path.
-- Commit and push the completed foundation slice.
+- Verified Moonraker websocket notifications and subscription behavior from current official documentation.
+- Added a Moonraker client shell that builds websocket URLs, identifies the ConsoleWatch connection, and subscribes to `webhooks` and `print_stats`.
+- Added notification ingestion for `notify_gcode_response`, `notify_klippy_ready`, `notify_klippy_shutdown`, `notify_klippy_disconnected`, and selected `notify_status_update` payloads.
+- Stored console entries with UTC timestamps, raw payload JSON, source, level, and classification metadata.
+- Added a bounded recent console API with printer, search, classification, source, level, and limit filters.
+- Added a basic recent console page in the frontend with filters and mock Moonraker notification ingestion.
+- Documented verified API sources and limitations honestly.
+- Validated with mocked Moonraker payloads because no live printer is available in this environment.
+- Commit and push the completed ingestion-proof slice.
 
 Out of scope for this slice:
 
-- Moonraker websocket connection.
-- Console ingestion.
 - Rolling retention and pruning behavior.
 - Manual diagnostic sessions.
 - Event-preserved incident captures.
 - Restart/reconnect boundary detection.
+- Long-running background watch management for all enabled printers.
+- Full historical backfill unless current Moonraker APIs prove it is available.
 - Global search and export.
 
 ## Decision Log
@@ -248,6 +250,10 @@ Out of scope for this slice:
 - 2026-06-07: Configure nginx to avoid stale `index.html` caching from the first scaffold.
 - 2026-06-07: Started Phase 1 foundation with printer CRUD as the first persistent user-facing behavior.
 - 2026-06-07: Docker Compose validation could not run locally because the `docker` CLI is not available on PATH in this shell.
+- 2026-06-07: Started Phase 2 ingestion proof; current priority is verified Moonraker notification ingestion and bounded recent-console review.
+- 2026-06-07: Verified from official Moonraker docs that websocket connections receive server-generated gcode response events and JSON-RPC notifications.
+- 2026-06-07: Verified `notify_gcode_response`, `notify_status_update`, `notify_klippy_ready`, `notify_klippy_shutdown`, and `notify_klippy_disconnected` as initial Phase 2 ingestion sources.
+- 2026-06-07: Live Moonraker websocket ingestion is represented by a client shell and tested payload conversion; no live printer was available for end-to-end connection testing.
 
 ## Known Risks
 
@@ -261,6 +267,7 @@ Out of scope for this slice:
 ## Open Questions
 
 - Which Moonraker notification stream is most reliable for user-visible console/gcode responses?
+- Answered for Phase 2: official Moonraker docs state that all Klippy gcode responses are forwarded over websocket as `notify_gcode_response`.
 - Can user-issued commands be observed reliably, or only responses and state changes?
 - Which log endpoints are available through Moonraker without mounting host files?
 - What metadata is available for current print filename and print state during every event?
@@ -275,12 +282,14 @@ Out of scope for this slice:
 - 2026-06-07: Implemented initial SQLite table bootstrap for printers, console entries, manual sessions, preserved captures, detected events, and restart boundaries.
 - 2026-06-07: Implemented printer profile CRUD API with API keys accepted server-side but excluded from responses.
 - 2026-06-07: Implemented frontend printer management with create, edit, delete, retention selector, watch toggle, backend health, and local timestamp formatting.
+- 2026-06-07: Implemented Moonraker notification ingestion for gcode responses, Klippy state notifications, and selected status updates.
+- 2026-06-07: Implemented bounded recent console API and frontend console review page with mock notification ingestion.
 
 ## Upcoming Commit Targets
 
-1. Phase 2A ingestion proof: Moonraker client investigation and documented notification/source support.
-2. Phase 2B ingestion proof: store mocked or verified Moonraker console messages and show recent entries.
-3. Phase 3A rolling watch: enable background ingestion for saved printers and bounded recent-entry UI.
+1. Phase 3A rolling watch: enable background ingestion for saved printers.
+2. Phase 3B rolling watch: add retention pruning and document pruning behavior.
+3. Phase 3C rolling watch: improve bounded recent-entry UI around active watch state.
 
 ## Validation Checklist
 
@@ -319,7 +328,8 @@ Phase 0 validation status:
 - No Moonraker API behavior has been verified yet.
 - Historical console backfill support is unknown.
 - Docker builds have not been validated yet because the local `docker` CLI is unavailable in this shell.
-- Moonraker connectivity and connection testing are not implemented until Phase 2.
+- Live Moonraker websocket connectivity has not been end-to-end tested because no live printer is available in this environment.
+- The mock ingest endpoint is for Phase 2 validation and may be replaced or gated before broader deployment.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
 
 Phase 1 validation status:
@@ -336,3 +346,20 @@ Phase 1 validation status:
 - [x] Git diff reviewed.
 - [x] Commit created.
 - [x] Commit pushed.
+
+Phase 2 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] Official Moonraker websocket notification docs checked.
+- [x] Moonraker notification-to-console-entry ingestion implemented.
+- [x] Recent console API implemented with bounded limits.
+- [x] Recent console frontend implemented.
+- [x] Mock Moonraker payload ingestion validated.
+- [x] Backend import/compile check passed.
+- [x] Backend tests passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.
