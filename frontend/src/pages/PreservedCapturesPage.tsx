@@ -216,10 +216,16 @@ export default function PreservedCapturesPage() {
                 </thead>
                 <tbody>
                   {selectedCapture.entries.map((entry) => (
-                    <tr key={entry.id} className={entry.is_trigger_entry ? "trigger-row" : undefined}>
+                    <tr
+                      key={entry.id}
+                      className={[entry.is_trigger_entry ? "trigger-row" : "", entry.boundary_type ? "boundary-row" : ""]
+                        .filter(Boolean)
+                        .join(" ")}
+                    >
                       <td>
                         {formatLocalDateTime(entry.captured_at)}
                         {entry.is_trigger_entry && <small>Trigger point</small>}
+                        {entry.boundary_type && <small>Boundary: {entry.boundary_type}</small>}
                       </td>
                       <td>
                         <span className={`pill level-${entry.level}`}>{entry.level}</span>

@@ -66,6 +66,7 @@ export type ConsoleEntry = {
   print_state: string | null;
   filename: string | null;
   restart_boundary_id: number | null;
+  boundary_type: string | null;
   created_at: string;
 };
 
@@ -148,6 +149,7 @@ export type PreservedEntry = {
   print_state: string | null;
   filename: string | null;
   is_trigger_entry: boolean;
+  boundary_type: string | null;
   created_at: string;
 };
 

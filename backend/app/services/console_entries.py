@@ -10,6 +10,7 @@ from app.schemas.console import MoonrakerNotificationIn
 from app.services.classification import classify_message, level_for_message
 from app.services.manual_sessions import copy_entry_to_active_sessions
 from app.services.preservation import process_entry_for_preservation
+from app.services.restart_boundaries import create_boundary_for_entry
 
 
 def list_recent_entries(
@@ -58,11 +59,26 @@ def ingest_moonraker_notification(
         db.commit()
         for entry in entries:
             db.refresh(entry)
+            boundary = create_boundary_for_entry(db, entry)
+            if boundary is not None:
+                setattr(entry, "boundary_type", boundary.boundary_type)
             copy_entry_to_active_sessions(db, entry)
             process_entry_for_preservation(db, entry)
         db.commit()
 
     return entries
+
+
+def attach_entry_metadata(db: Session, entry: ConsoleEntry) -> ConsoleEntry:
+    if entry.restart_boundary_id is None:
+        setattr(entry, "boundary_type", None)
+        return entry
+
+    from app.models.entities import RestartBoundary
+
+    boundary = db.get(RestartBoundary, entry.restart_boundary_id)
+    setattr(entry, "boundary_type", boundary.boundary_type if boundary else None)
+    return entry
 
 
 def _entries_from_notification(

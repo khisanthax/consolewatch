@@ -305,6 +305,11 @@ td small {
   background: #fff6db;
 }
 
+.boundary-row {
+  border-left: 4px solid #347a58;
+  background: #f0f7f2;
+}
+
 .event-strip {
   display: flex;
   flex-wrap: wrap;

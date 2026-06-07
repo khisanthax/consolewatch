@@ -18,7 +18,7 @@ def list_console_entries(
     limit: int = Query(default=100, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
-    return console_entries.list_recent_entries(
+    entries = console_entries.list_recent_entries(
         db,
         printer_id=printer_id,
         search=search,
@@ -27,6 +27,7 @@ def list_console_entries(
         level=level,
         limit=limit,
     )
+    return [console_entries.attach_entry_metadata(db, entry) for entry in entries]
 
 
 @router.post("/moonraker-notification", response_model=ConsoleEntryIngestResult, status_code=status.HTTP_201_CREATED)

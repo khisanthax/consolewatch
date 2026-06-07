@@ -276,7 +276,7 @@ export default function LiveConsolePage() {
                 </thead>
                 <tbody>
                   {entries.map((entry) => (
-                    <tr key={entry.id}>
+                    <tr key={entry.id} className={entry.boundary_type ? "boundary-row" : undefined}>
                       <td>{formatLocalDateTime(entry.captured_at)}</td>
                       <td>
                         <span className={`pill level-${entry.level}`}>{entry.level}</span>
@@ -290,6 +290,7 @@ export default function LiveConsolePage() {
                             {[entry.event_type, entry.filename].filter(Boolean).join(" / ")}
                           </small>
                         )}
+                        {entry.boundary_type && <small>Boundary: {entry.boundary_type}</small>}
                       </td>
                     </tr>
                   ))}

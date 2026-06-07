@@ -42,6 +42,7 @@ class PreservedEntryRead(BaseModel):
     print_state: str | None
     filename: str | None
     is_trigger_entry: bool
+    boundary_type: str | None = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

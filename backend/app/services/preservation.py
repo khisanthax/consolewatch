@@ -87,6 +87,7 @@ def process_entry_for_preservation(db: Session, entry: ConsoleEntry) -> Preserve
         message=entry.message,
         raw_payload_json=entry.raw_payload_json,
         related_capture_id=capture.id,
+        restart_boundary_id=entry.restart_boundary_id,
     )
     db.add(detected)
     db.flush()
@@ -149,7 +150,24 @@ def list_capture_entries(
     statement = statement.order_by(PreservedConsoleEntry.captured_at.asc(), PreservedConsoleEntry.id.asc()).limit(
         bounded_limit
     )
-    return list(db.scalars(statement).all())
+    return [attach_preserved_entry_metadata(db, entry) for entry in db.scalars(statement).all()]
+
+
+def attach_preserved_entry_metadata(db: Session, entry: PreservedConsoleEntry) -> PreservedConsoleEntry:
+    if entry.original_console_entry_id is None:
+        setattr(entry, "boundary_type", None)
+        return entry
+
+    original = db.get(ConsoleEntry, entry.original_console_entry_id)
+    if original is None or original.restart_boundary_id is None:
+        setattr(entry, "boundary_type", None)
+        return entry
+
+    from app.models.entities import RestartBoundary
+
+    boundary = db.get(RestartBoundary, original.restart_boundary_id)
+    setattr(entry, "boundary_type", boundary.boundary_type if boundary else None)
+    return entry
 
 
 def detected_events_for_capture(db: Session, capture_id: int) -> list[DetectedEvent]:

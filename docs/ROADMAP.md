@@ -216,31 +216,28 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 5 event-triggered preservation completed; next priority is Phase 6 restart and firmware boundary handling.
+Current slice: Phase 6 restart and firmware boundary handling.
 
 Scope:
 
-- Add an explicit rule-based trigger engine for error-like console entries and Klippy state events.
-- Write detected events when trigger rules match.
-- Create preserved captures with a 30-minute before/after window around the trigger.
-- Extend an active capture when another trigger arrives during its post-window.
-- Copy rolling console entries into preserved capture rows so preserved captures survive rolling pruning.
-- Mark the trigger entry in copied preserved entries.
-- Add preserved captures list/detail APIs with bounded filters.
-- Build frontend preserved capture list and detail review with trigger marker.
-- Validate trigger creation, copied preservation, duplicate-window extension, and pruning survival.
+- Create restart boundary records from Klippy ready/shutdown/disconnected events and restart-like console messages.
+- Link matching console entries to `restart_boundaries`.
+- Mark restart/reconnect boundaries in the recent console timeline.
+- Mark boundary-like events in preserved capture timelines.
+- Preserve around restart-related events through the existing Phase 5 preservation path.
+- Add duplicate suppression for repeated boundary events during reconnect storms.
+- Validate boundary creation, duplicate suppression, entry linkage, and UI-visible markers.
 - Document limitations honestly.
-- Committed and pushed the completed preservation slice.
+- Commit and push the completed boundary slice.
 
 Out of scope for this slice:
 
-- Restart/reconnect boundary detection.
 - Full historical backfill unless current Moonraker APIs prove it is available.
 - Global search and export.
-- Reconnect storm suppression beyond a single task per watched printer and reconnect delay.
 - Exporting sessions as `.txt`.
 - Advanced configurable trigger rules.
 - Exporting captures as `.txt`.
+- Deep firmware/Moonraker causality analysis beyond explicit boundary markers.
 
 ## Decision Log
 
@@ -266,6 +263,10 @@ Out of scope for this slice:
 - 2026-06-07: Started Phase 5 event-triggered preservation; current priority is explicit trigger rules and copied preserved capture rows.
 - 2026-06-07: Implemented explicit trigger rules for error-like console entries and Klippy state events.
 - 2026-06-07: Implemented detected events, preserved capture creation/extension, copied preserved entries, and trigger-entry marking.
+- 2026-06-07: Started Phase 6 restart and firmware boundary handling; current priority is durable boundary records plus timeline markers.
+- 2026-06-07: Implemented restart boundary records for Klippy state notifications and restart-like console messages.
+- 2026-06-07: Added duplicate suppression for same-type printer boundaries within a reconnect-storm window.
+- 2026-06-07: Recent console and preserved capture timelines now expose boundary markers.
 
 ## Known Risks
 
@@ -299,6 +300,7 @@ Out of scope for this slice:
 - 2026-06-07: Implemented rolling watch background manager, retention pruning, watch status/prune APIs, and live console watch status UI.
 - 2026-06-07: Implemented manual diagnostic session APIs, active entry copying, session list/detail UI, and session filtering.
 - 2026-06-07: Implemented event-triggered preserved captures, detected events, capture detail API, and preserved capture review UI.
+- 2026-06-07: Implemented restart boundary detection, entry linkage, duplicate suppression, and UI boundary markers.
 
 ## Upcoming Commit Targets
 
@@ -348,6 +350,7 @@ Phase 0 validation status:
 - Phase 3 background watch behavior is validated at service/API level, not against a live Moonraker websocket.
 - Phase 4 manual sessions copy newly ingested entries only while active; they do not backfill older rolling entries from before the session start.
 - Phase 5 preservation copies entries currently present in rolling `console_entries`; if the rolling table was already pruned before a trigger, older pre-trigger context cannot be recovered.
+- Phase 6 boundary detection is rule-based and limited to explicit Klippy state notifications plus restart/disconnect/reconnect-like messages.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
 
 Phase 1 validation status:
@@ -434,3 +437,21 @@ Phase 5 validation status:
 - [x] Git diff reviewed.
 - [x] Commit created.
 - [x] Commit pushed.
+
+Phase 6 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] Restart boundary records implemented.
+- [x] Console entry boundary linkage implemented.
+- [x] Duplicate boundary suppression implemented.
+- [x] Recent console timeline boundary markers implemented.
+- [x] Preserved capture boundary markers implemented.
+- [x] Backend import/compile check passed.
+- [x] Backend tests passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [ ] Live Moonraker websocket tested.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.
