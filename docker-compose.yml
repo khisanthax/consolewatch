@@ -1,0 +1,32 @@
+services:
+  backend:
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      CONSOLEWATCH_APP_NAME: ${CONSOLEWATCH_APP_NAME:-ConsoleWatch}
+      CONSOLEWATCH_ENV: ${CONSOLEWATCH_ENV:-production}
+      CONSOLEWATCH_API_HOST: 0.0.0.0
+      CONSOLEWATCH_API_PORT: 8000
+      CONSOLEWATCH_DATABASE_URL: ${CONSOLEWATCH_DATABASE_URL:-sqlite:////data/consolewatch.db}
+      CONSOLEWATCH_RETENTION_PRUNE_INTERVAL_SECONDS: ${CONSOLEWATCH_RETENTION_PRUNE_INTERVAL_SECONDS:-300}
+      CONSOLEWATCH_MOONRAKER_RECONNECT_DELAY_SECONDS: ${CONSOLEWATCH_MOONRAKER_RECONNECT_DELAY_SECONDS:-5}
+    ports:
+      - "${CONSOLEWATCH_API_EXTERNAL_PORT:-8010}:8000"
+    volumes:
+      - consolewatch_data:/data
+
+  frontend:
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    depends_on:
+      - backend
+    ports:
+      - "${CONSOLEWATCH_FRONTEND_PORT:-8490}:80"
+
+volumes:
+  consolewatch_data:
+    name: consolewatch_data
