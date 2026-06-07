@@ -202,8 +202,8 @@ Definition of done:
 
 - [x] Phase 0 roadmap drafted.
 - [x] Phase 0 scaffold created.
-- [ ] Phase 0 scaffold committed.
-- [ ] Phase 0 scaffold pushed.
+- [x] Phase 0 scaffold committed.
+- [x] Phase 0 scaffold pushed.
 - [ ] Phase 1 foundation complete.
 - [ ] Phase 2 ingestion proof complete.
 - [ ] Phase 3 rolling watch complete.
@@ -264,6 +264,7 @@ Out of scope for this slice:
 
 - 2026-06-07: Created initial roadmap with product concepts, architecture, data model plan, phases, risks, and current slice.
 - 2026-06-07: Created initial backend/frontend/docs scaffold files.
+- 2026-06-07: Pushed initial Phase 0 scaffold to GitHub.
 
 ## Upcoming Commit Targets
 
@@ -291,8 +292,8 @@ Phase 0 validation status:
 - [x] Backend import/compile check.
 - [x] Frontend production build.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
 
 ## Deployment Notes
 
