@@ -216,29 +216,28 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 3 rolling console watch completed; next priority is Phase 4 manual diagnostic sessions.
+Current slice: Phase 4 manual diagnostic sessions.
 
 Scope:
 
-- Honor the per-printer Rolling Console Watch toggle and retention window from printer profiles.
-- Add a background watch manager that starts Moonraker websocket ingestion for enabled printers with `console_watch_enabled`.
-- Update printer connection status, last connection time, and last error from background watch attempts.
-- Add rolling retention pruning for each watched printer based on `retention_hours`.
-- Keep saved manual session and preserved capture copy tables untouched by rolling pruning.
-- Add backend watch status and manual prune endpoints for observability and validation.
-- Improve the live console UI with active watch status, bounded auto-refresh, and retention-aware controls.
-- Validate with mocked/service-level behavior because no live Moonraker printer is available in this environment.
-- Document live websocket and Docker validation limitations honestly.
-- Committed and pushed the completed rolling-watch slice.
+- Implement manual diagnostic session start/stop behavior per printer.
+- Copy newly ingested console entries into active manual sessions so saved sessions survive rolling pruning.
+- Support save and discard for completed sessions.
+- Add session list and detail APIs with bounded entry search/filtering.
+- Build frontend session controls for start, stop, save, discard, list, and detail review.
+- Show session duration, printer name, status, notes, and copied entries.
+- Validate saved sessions surviving rolling pruning with backend tests.
+- Document any limitations honestly.
+- Commit and push the completed manual-session slice.
 
 Out of scope for this slice:
 
-- Manual diagnostic sessions.
 - Event-preserved incident captures.
 - Restart/reconnect boundary detection.
 - Full historical backfill unless current Moonraker APIs prove it is available.
 - Global search and export.
 - Reconnect storm suppression beyond a single task per watched printer and reconnect delay.
+- Exporting sessions as `.txt`.
 
 ## Decision Log
 
@@ -258,6 +257,9 @@ Out of scope for this slice:
 - 2026-06-07: Added a background rolling watch manager that starts one websocket task per enabled watched printer and records supported Moonraker notifications.
 - 2026-06-07: Added rolling pruning for `console_entries` only; manual session and preserved capture copy tables remain untouched by pruning.
 - 2026-06-07: Added watch status and manual prune endpoints for observability and validation.
+- 2026-06-07: Started Phase 4 manual diagnostic sessions; current priority is active session recording with copied entry rows.
+- 2026-06-07: Implemented manual session start/stop/save/discard behavior and copied active-session entries from newly ingested console entries.
+- 2026-06-07: Saved manual sessions use copied rows in `manual_session_entries`, so they survive rolling pruning of `console_entries`.
 
 ## Known Risks
 
@@ -289,6 +291,7 @@ Out of scope for this slice:
 - 2026-06-07: Implemented Moonraker notification ingestion for gcode responses, Klippy state notifications, and selected status updates.
 - 2026-06-07: Implemented bounded recent console API and frontend console review page with mock notification ingestion.
 - 2026-06-07: Implemented rolling watch background manager, retention pruning, watch status/prune APIs, and live console watch status UI.
+- 2026-06-07: Implemented manual diagnostic session APIs, active entry copying, session list/detail UI, and session filtering.
 
 ## Upcoming Commit Targets
 
@@ -336,6 +339,7 @@ Phase 0 validation status:
 - Live Moonraker websocket connectivity has not been end-to-end tested because no live printer is available in this environment.
 - The mock ingest endpoint is for Phase 2 validation and may be replaced or gated before broader deployment.
 - Phase 3 background watch behavior is validated at service/API level, not against a live Moonraker websocket.
+- Phase 4 manual sessions copy newly ingested entries only while active; they do not backfill older rolling entries from before the session start.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
 
 Phase 1 validation status:
@@ -386,3 +390,20 @@ Phase 2 validation status:
 - [x] Git diff reviewed.
 - [x] Commit created.
 - [x] Commit pushed.
+
+Phase 4 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] Manual session start/stop/save/discard API implemented.
+- [x] Active session entry copying implemented.
+- [x] Session list/detail API implemented with bounded filters.
+- [x] Manual sessions frontend implemented.
+- [x] Saved session survives rolling pruning test passed.
+- [x] Backend import/compile check passed.
+- [x] Backend tests passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.

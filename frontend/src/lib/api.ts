@@ -90,6 +90,50 @@ export type RetentionPruneResult = {
   deleted_total: number;
 };
 
+export type ManualSessionEntry = {
+  id: number;
+  session_id: number;
+  original_console_entry_id: number | null;
+  captured_at: string;
+  source: string;
+  level: string;
+  message: string;
+  raw_payload_json: string | null;
+  classification: string;
+  event_type: string | null;
+  print_state: string | null;
+  filename: string | null;
+  created_at: string;
+};
+
+export type ManualSession = {
+  id: number;
+  printer_id: number;
+  printer_name: string | null;
+  label: string;
+  notes: string | null;
+  status: string;
+  started_at: string;
+  ended_at: string | null;
+  saved: boolean;
+  stop_reason: string | null;
+  created_at: string;
+  updated_at: string;
+  entry_count: number;
+};
+
+export type ManualSessionDetail = ManualSession & {
+  entries: ManualSessionEntry[];
+};
+
+export type ManualSessionFilters = {
+  search?: string;
+  classification?: string;
+  source?: string;
+  level?: string;
+  limit?: number;
+};
+
 export function listPrinters() {
   return requestJson<Printer[]>("/printers");
 }
@@ -142,5 +186,47 @@ export function getWatchStatus() {
 export function pruneWatchEntries() {
   return requestJson<RetentionPruneResult>("/watch/prune", {
     method: "POST"
+  });
+}
+
+export function listManualSessions(printerId?: number) {
+  const query = printerId ? `?printer_id=${printerId}` : "";
+  return requestJson<ManualSession[]>(`/sessions${query}`);
+}
+
+export function startManualSession(payload: { printer_id: number; label: string; notes?: string | null }) {
+  return requestJson<ManualSession>("/sessions", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+
+export function getManualSession(id: number, filters: ManualSessionFilters = {}) {
+  const params = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      params.set(key, String(value));
+    }
+  });
+  const query = params.toString();
+  return requestJson<ManualSessionDetail>(`/sessions/${id}${query ? `?${query}` : ""}`);
+}
+
+export function stopManualSession(id: number, stopReason = "manual") {
+  return requestJson<ManualSession>(`/sessions/${id}/stop`, {
+    method: "POST",
+    body: JSON.stringify({ stop_reason: stopReason })
+  });
+}
+
+export function saveManualSession(id: number) {
+  return requestJson<ManualSession>(`/sessions/${id}/save`, {
+    method: "POST"
+  });
+}
+
+export function discardManualSession(id: number) {
+  return requestJson<void>(`/sessions/${id}`, {
+    method: "DELETE"
   });
 }

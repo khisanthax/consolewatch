@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 3 rolling watch is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, a bounded recent console page, background watch management for watch-enabled printers, and rolling retention pruning. Manual sessions and preserved captures are planned but not implemented yet.
+Phase 4 manual sessions are in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, a frontend printer management page, Moonraker notification-to-entry ingestion, a bounded recent console page, background watch management for watch-enabled printers, rolling retention pruning, and manual diagnostic sessions. Preserved captures are planned but not implemented yet.
 
 ## Planned Architecture
 
@@ -92,6 +92,19 @@ Useful endpoints:
 - `GET /api/v1/watch/status`
 - `POST /api/v1/watch/prune`
 
+## Manual Sessions
+
+Manual diagnostic sessions intentionally copy newly ingested console entries for the selected printer while a session is active. Copied rows live in `manual_session_entries`, so saved sessions survive rolling pruning of `console_entries`.
+
+Useful endpoints:
+
+- `GET /api/v1/sessions`
+- `POST /api/v1/sessions`
+- `GET /api/v1/sessions/{session_id}`
+- `POST /api/v1/sessions/{session_id}/stop`
+- `POST /api/v1/sessions/{session_id}/save`
+- `DELETE /api/v1/sessions/{session_id}`
+
 ## Validation
 
 Phase 1 local validation:
@@ -124,6 +137,15 @@ npm run build
 ```
 
 Phase 3 local validation:
+
+```powershell
+python -m compileall backend\app
+python -m pytest backend\tests
+cd frontend
+npm run build
+```
+
+Phase 4 local validation:
 
 ```powershell
 python -m compileall backend\app

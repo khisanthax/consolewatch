@@ -305,6 +305,17 @@ td small {
   grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
 }
 
+.sessions-layout {
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) repeat(4, minmax(120px, 160px)) auto;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
 .panel dl {
   display: grid;
   gap: 10px;
@@ -337,6 +348,10 @@ td small {
   }
 
   .split-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row {
     grid-template-columns: 1fr;
   }
 

@@ -92,6 +92,8 @@ class ManualLogSession(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, onupdate=utc_now, nullable=False)
 
+    entries: Mapped[list["ManualSessionEntry"]] = relationship(cascade="all, delete-orphan")
+
 
 class ManualSessionEntry(Base):
     __tablename__ = "manual_session_entries"
