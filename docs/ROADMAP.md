@@ -209,14 +209,14 @@ Definition of done:
 - [x] Phase 3 rolling watch complete.
 - [x] Phase 4 manual sessions complete.
 - [x] Phase 5 preservation complete.
-- [ ] Phase 6 restart boundaries complete.
+- [x] Phase 6 restart boundaries complete.
 - [ ] Phase 7 search/export complete.
 - [ ] Phase 8 polish complete.
 - [ ] MVP complete.
 
 ## Current Priority Slice
 
-Current slice: Phase 6 restart and firmware boundary handling.
+Current slice: Phase 6 restart and firmware boundary handling completed; next priority is Phase 7 search and export.
 
 Scope:
 
@@ -228,7 +228,7 @@ Scope:
 - Add duplicate suppression for repeated boundary events during reconnect storms.
 - Validate boundary creation, duplicate suppression, entry linkage, and UI-visible markers.
 - Document limitations honestly.
-- Commit and push the completed boundary slice.
+- Committed and pushed the completed boundary slice.
 
 Out of scope for this slice:
 
@@ -304,9 +304,9 @@ Out of scope for this slice:
 
 ## Upcoming Commit Targets
 
-1. Phase 6A boundaries: create restart boundary records from Klippy state and restart-like console events.
-2. Phase 6B boundaries: mark restart/reconnect boundaries in recent console and preserved capture timelines.
-3. Phase 6C boundaries: improve duplicate handling around reconnect storms.
+1. Phase 7A search/export: global bounded search across rolling console, manual session copies, and preserved capture copies.
+2. Phase 7B search/export: `.txt` export for preserved captures and manual sessions.
+3. Phase 7C search/export: `.txt` export for filtered global search results.
 
 ## Validation Checklist
 
@@ -453,5 +453,5 @@ Phase 6 validation status:
 - [ ] Docker Compose validation passed.
 - [ ] Live Moonraker websocket tested.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
