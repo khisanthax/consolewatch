@@ -206,7 +206,7 @@ Definition of done:
 - [x] Phase 0 scaffold pushed.
 - [x] Phase 1 foundation complete.
 - [x] Phase 2 ingestion proof complete.
-- [ ] Phase 3 rolling watch complete.
+- [x] Phase 3 rolling watch complete.
 - [ ] Phase 4 manual sessions complete.
 - [ ] Phase 5 preservation complete.
 - [ ] Phase 6 restart boundaries complete.
@@ -216,7 +216,7 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 3 rolling console watch.
+Current slice: Phase 3 rolling console watch completed; next priority is Phase 4 manual diagnostic sessions.
 
 Scope:
 
@@ -229,7 +229,7 @@ Scope:
 - Improve the live console UI with active watch status, bounded auto-refresh, and retention-aware controls.
 - Validate with mocked/service-level behavior because no live Moonraker printer is available in this environment.
 - Document live websocket and Docker validation limitations honestly.
-- Commit and push the completed rolling-watch slice.
+- Committed and pushed the completed rolling-watch slice.
 
 Out of scope for this slice:
 
@@ -292,9 +292,9 @@ Out of scope for this slice:
 
 ## Upcoming Commit Targets
 
-1. Phase 3A rolling watch: enable background ingestion for saved printers.
-2. Phase 3B rolling watch: add retention pruning and document pruning behavior.
-3. Phase 3C rolling watch: improve bounded recent-entry UI around active watch state.
+1. Phase 4A manual sessions: start/stop session API and active session entry copying.
+2. Phase 4B manual sessions: save/discard session behavior and session list UI.
+3. Phase 4C manual sessions: session detail view with bounded search/filtering.
 
 ## Validation Checklist
 
@@ -367,8 +367,8 @@ Phase 3 validation status:
 - [ ] Docker Compose validation passed.
 - [ ] Live Moonraker websocket tested.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
 
 Phase 2 validation status:
 
