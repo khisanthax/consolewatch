@@ -205,7 +205,7 @@ Definition of done:
 - [x] Phase 0 scaffold committed.
 - [x] Phase 0 scaffold pushed.
 - [x] Phase 1 foundation complete.
-- [ ] Phase 2 ingestion proof complete.
+- [x] Phase 2 ingestion proof complete.
 - [ ] Phase 3 rolling watch complete.
 - [ ] Phase 4 manual sessions complete.
 - [ ] Phase 5 preservation complete.
@@ -228,7 +228,7 @@ Scope:
 - Added a basic recent console page in the frontend with filters and mock Moonraker notification ingestion.
 - Documented verified API sources and limitations honestly.
 - Validated with mocked Moonraker payloads because no live printer is available in this environment.
-- Commit and push the completed ingestion-proof slice.
+- Committed and pushed the completed ingestion-proof slice.
 
 Out of scope for this slice:
 
@@ -361,5 +361,5 @@ Phase 2 validation status:
 - [x] Docker Compose validation attempted.
 - [ ] Docker Compose validation passed.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
