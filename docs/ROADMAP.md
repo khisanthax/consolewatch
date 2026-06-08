@@ -211,12 +211,12 @@ Definition of done:
 - [x] Phase 5 preservation complete.
 - [x] Phase 6 restart boundaries complete.
 - [x] Phase 7 search/export complete.
-- [ ] Phase 8 polish complete.
+- [x] Phase 8 polish complete.
 - [ ] MVP complete.
 
 ## Current Priority Slice
 
-Current slice: Phase 8 polish, diagnostics, and storage visibility validation.
+Current slice: Phase 8 complete; MVP hardening and live-environment validation remain.
 
 Scope:
 
@@ -274,6 +274,7 @@ Out of scope for this slice:
 - 2026-06-08: Implemented Phase 8 diagnostics API with non-secret runtime settings, trigger rule visibility, storage metadata, and record counts.
 - 2026-06-08: Added dashboard summary counts and settings diagnostics/storage panels.
 - 2026-06-08: Phase 8 Docker validation could not run locally because the `docker` CLI is still unavailable on PATH in this shell.
+- 2026-06-08: Pushed Phase 8 diagnostics/polish implementation; MVP remains open for Docker-host and live Moonraker validation.
 
 ## Known Risks
 
@@ -313,9 +314,9 @@ Out of scope for this slice:
 
 ## Upcoming Commit Targets
 
-1. Phase 8 final sync: mark roadmap completion after the implementation commit is pushed.
-2. MVP hardening: validate Docker on a host with Docker available.
-3. MVP hardening: run end-to-end Moonraker websocket validation against a live printer.
+1. MVP hardening: validate Docker Compose on a host with Docker available.
+2. MVP hardening: run end-to-end Moonraker websocket validation against a live printer.
+3. MVP hardening: decide whether optional notification hooks or configurable trigger rules belong before the MVP tag.
 
 ## Validation Checklist
 
@@ -498,5 +499,5 @@ Phase 8 validation status:
 - [x] Docker Compose validation attempted.
 - [ ] Docker Compose validation passed.
 - [x] Git diff reviewed.
-- [ ] Commit created.
-- [ ] Commit pushed.
+- [x] Commit created.
+- [x] Commit pushed.
