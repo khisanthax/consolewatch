@@ -216,20 +216,19 @@ Definition of done:
 
 ## Current Priority Slice
 
-Current slice: Phase 7 search and export completed; next priority is Phase 8 polish, diagnostics, and storage visibility.
+Current slice: Phase 8 polish, diagnostics, and storage visibility validation.
 
 Scope:
 
-- Add global bounded search across rolling console entries, manual session copies, and preserved capture copies.
-- Support search filters for printer, text, classification, level/source, and time range.
-- Add `.txt` export for preserved captures.
-- Add `.txt` export for manual sessions.
-- Add `.txt` export for filtered global search results.
-- Include printer/time/source/classification metadata in exports.
-- Keep result limits bounded so the browser and backend do not load unbounded log history.
-- Validate search and export behavior with backend tests and frontend build.
+- Add dashboard counts for printers, rolling entries, sessions, preserved captures, detected events, and restart boundaries.
+- Add storage visibility for SQLite database path, existence, and size where available.
+- Add diagnostics/settings API that exposes non-secret runtime configuration and trigger rule visibility.
+- Improve settings/diagnostics UI with backup/restore, Docker persistence, frontend cache, trusted LAN, and validation notes.
+- Improve empty/loading/error states in dashboard and settings surfaces.
+- Keep Moonraker API keys and other secrets out of diagnostic responses.
+- Validate diagnostics behavior with backend tests and frontend build.
 - Document limitations honestly.
-- Committed and pushed the completed search/export slice.
+- Commit and push the completed polish/diagnostics slice.
 
 Out of scope for this slice:
 
@@ -238,8 +237,7 @@ Out of scope for this slice:
 - Deep firmware/Moonraker causality analysis beyond explicit boundary markers.
 - `.json` exports.
 - Virtualized result rendering.
-- `.json` exports.
-- Virtualized result rendering.
+- Internet-facing authentication.
 
 ## Decision Log
 
@@ -272,6 +270,10 @@ Out of scope for this slice:
 - 2026-06-07: Started Phase 7 search and export; current priority is bounded global search and readable `.txt` exports.
 - 2026-06-07: Implemented bounded global search across rolling console entries, manual session copies, and preserved capture copies.
 - 2026-06-07: Implemented `.txt` exports for filtered search results, manual sessions, and preserved captures.
+- 2026-06-08: Started Phase 8 polish, diagnostics, and storage visibility; current priority is dashboard/storage diagnostics plus final documentation.
+- 2026-06-08: Implemented Phase 8 diagnostics API with non-secret runtime settings, trigger rule visibility, storage metadata, and record counts.
+- 2026-06-08: Added dashboard summary counts and settings diagnostics/storage panels.
+- 2026-06-08: Phase 8 Docker validation could not run locally because the `docker` CLI is still unavailable on PATH in this shell.
 
 ## Known Risks
 
@@ -307,12 +309,13 @@ Out of scope for this slice:
 - 2026-06-07: Implemented event-triggered preserved captures, detected events, capture detail API, and preserved capture review UI.
 - 2026-06-07: Implemented restart boundary detection, entry linkage, duplicate suppression, and UI boundary markers.
 - 2026-06-07: Implemented global search API/UI and text exports for search results, manual sessions, and preserved captures.
+- 2026-06-08: Implemented diagnostics API/UI, storage visibility, dashboard counts, and deployment notes for Phase 8 polish.
 
 ## Upcoming Commit Targets
 
-1. Phase 8A polish: dashboard counts, storage usage visibility, and better empty/loading/error states.
-2. Phase 8B diagnostics: backup/restore docs, clearer deployment diagnostics, and trigger rule visibility.
-3. Phase 8C polish: optional notification hooks and final MVP documentation pass.
+1. Phase 8 final sync: mark roadmap completion after the implementation commit is pushed.
+2. MVP hardening: validate Docker on a host with Docker available.
+3. MVP hardening: run end-to-end Moonraker websocket validation against a live printer.
 
 ## Validation Checklist
 
@@ -359,6 +362,7 @@ Phase 0 validation status:
 - Phase 6 boundary detection is rule-based and limited to explicit Klippy state notifications plus restart/disconnect/reconnect-like messages.
 - Phase 7 search/export is bounded by explicit limits; it is not a full unbounded archive dump.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
+- Phase 8 diagnostics can only report SQLite file size when the backend can resolve and access a file-backed SQLite database path.
 
 Phase 1 validation status:
 
@@ -479,3 +483,20 @@ Phase 7 validation status:
 - [x] Git diff reviewed.
 - [x] Commit created.
 - [x] Commit pushed.
+
+Phase 8 validation status:
+
+- [x] Roadmap updated before coding.
+- [x] Diagnostics API implemented.
+- [x] Diagnostics service excludes secrets from responses.
+- [x] Storage path/existence/size visibility implemented.
+- [x] Dashboard counts implemented.
+- [x] Settings diagnostics UI implemented.
+- [x] Backend import/compile check passed.
+- [x] Backend tests passed.
+- [x] Frontend production build passed.
+- [x] Docker Compose validation attempted.
+- [ ] Docker Compose validation passed.
+- [x] Git diff reviewed.
+- [ ] Commit created.
+- [ ] Commit pushed.

@@ -317,6 +317,20 @@ td small {
   margin-bottom: 14px;
 }
 
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.plain-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #3b473f;
+  line-height: 1.55;
+}
+
 .console-layout {
   grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
 }

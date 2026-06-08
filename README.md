@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 7 search and export is in progress. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, rolling watch, manual sessions, rule-triggered preserved captures, restart/reconnect boundary markers, bounded global search, and text exports.
+Phase 8 polish and diagnostics is implemented. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, rolling watch, manual sessions, rule-triggered preserved captures, restart/reconnect boundary markers, bounded global search, text exports, dashboard counts, and diagnostics/storage visibility.
 
 ## Planned Architecture
 
@@ -133,6 +133,16 @@ Useful endpoints:
 - `GET /api/v1/exports/manual-session/{session_id}.txt`
 - `GET /api/v1/exports/preserved-capture/{capture_id}.txt`
 
+## Diagnostics and Storage Visibility
+
+The diagnostics endpoint exposes non-secret runtime and storage information for deployment checks. It reports record counts, the configured SQLite path, whether the database file is visible to the backend process, file size when available, background watch settings, trigger rule visibility, and restart-boundary suppression settings.
+
+Useful endpoint:
+
+- `GET /api/v1/diagnostics`
+
+The diagnostics response intentionally excludes Moonraker API keys and other secrets. The Settings page displays the same storage, runtime, trigger rule, and persistence notes for quick Portainer/Docker checks.
+
 ## Validation
 
 Phase 1 local validation:
@@ -201,6 +211,15 @@ npm run build
 ```
 
 Phase 7 local validation:
+
+```powershell
+python -m compileall backend\app
+python -m pytest backend\tests
+cd frontend
+npm run build
+```
+
+Phase 8 local validation:
 
 ```powershell
 python -m compileall backend\app

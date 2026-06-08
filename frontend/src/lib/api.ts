@@ -30,6 +30,10 @@ export async function getHealth() {
   }>("/health");
 }
 
+export function getDiagnostics() {
+  return requestJson<Diagnostics>("/diagnostics");
+}
+
 export type Printer = {
   id: number;
   name: string;
@@ -210,6 +214,28 @@ export type GlobalSearchFilters = {
   start_at?: string;
   end_at?: string;
   limit?: number;
+};
+
+export type Diagnostics = {
+  counts: Record<string, number>;
+  storage: {
+    database_backend: string;
+    sqlite_path: string | null;
+    sqlite_exists: boolean;
+    sqlite_size_bytes: number | null;
+  };
+  runtime: {
+    app_name: string;
+    environment: string;
+    background_watch_enabled: boolean;
+    watch_manager_interval_seconds: number;
+    retention_prune_interval_seconds: number;
+    moonraker_reconnect_delay_seconds: number;
+  };
+  trigger_classifications: string[];
+  trigger_message_markers: string[];
+  boundary_suppression_seconds: number;
+  notes: string[];
 };
 
 export function listPrinters() {
