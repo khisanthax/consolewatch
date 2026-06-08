@@ -104,6 +104,12 @@ a {
   align-items: start;
 }
 
+.stack-layout {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
 .panel {
   border: 1px solid #d8ded5;
   border-radius: 8px;
@@ -332,7 +338,7 @@ td small {
 }
 
 .console-layout {
-  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  grid-template-columns: 1fr;
 }
 
 .sessions-layout {

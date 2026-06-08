@@ -38,13 +38,13 @@ export default function DashboardPage() {
               <dd>{printers.length}</dd>
             </div>
             <div>
-              <dt>Rolling watch enabled</dt>
+              <dt>Continuous watch enabled</dt>
               <dd>{watchEnabledCount}</dd>
             </div>
           </dl>
         </div>
         <div className="panel">
-          <h3>Rolling watch</h3>
+          <h3>Continuous watch</h3>
           <dl>
             <div>
               <dt>Background worker</dt>
@@ -64,7 +64,7 @@ export default function DashboardPage() {
           <h3>Data summary</h3>
           <dl>
             <div>
-              <dt>Rolling entries</dt>
+              <dt>Continuous entries</dt>
               <dd>{diagnostics?.counts.console_entries ?? 0}</dd>
             </div>
             <div>

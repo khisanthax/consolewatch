@@ -26,17 +26,17 @@ The product goal is to keep the context that normally disappears when firmware r
 
 ## Core Product Concepts
 
-### Rolling Console Watch
+### Continuous Console Watch
 
-Passive recent memory per printer. When enabled, ConsoleWatch records recent console/log output and prunes old rows based on a retention window such as 4, 8, 12, or 24 hours.
+Passive recent memory per printer. When enabled, ConsoleWatch records recent console/log output and prunes old rows based on a retention window from 4 hours up to 1 month.
 
 ### Manual Diagnostic Session
 
-Intentional user recording. A user can start and stop a session, label it, add notes, save it, discard it, and later review copied entries that survive rolling pruning.
+Intentional user recording. A user can start and stop a session, label it, add notes, save it, discard it, and later review copied entries that survive continuous watch pruning.
 
 ### Event-Preserved Incident Capture
 
-Automatic fault capture. Rule-based triggers preserve entries around an important message or state transition, including a visible trigger point. Preserved captures survive rolling pruning.
+Automatic fault capture. Rule-based triggers preserve entries around an important message or state transition, including a visible trigger point. Preserved captures survive continuous watch pruning.
 
 ### Restart / Boundary Timeline
 
@@ -147,13 +147,13 @@ Definition of done:
 - Show basic recent console page.
 - Document Moonraker API limitations.
 
-### Phase 3: Rolling Console Watch
+### Phase 3: Continuous Console Watch
 
 - Per-printer watch toggle.
 - Retention window selector.
 - Automatic background ingestion for enabled printers.
 - Connection manager for active printers.
-- Rolling pruning job.
+- Continuous watch pruning job.
 - Bounded UI table and recent-entry search/filtering.
 
 ### Phase 4: Manual Diagnostic Sessions
@@ -206,7 +206,7 @@ Definition of done:
 - [x] Phase 0 scaffold pushed.
 - [x] Phase 1 foundation complete.
 - [x] Phase 2 ingestion proof complete.
-- [x] Phase 3 rolling watch complete.
+- [x] Phase 3 continuous watch complete.
 - [x] Phase 4 manual sessions complete.
 - [x] Phase 5 preservation complete.
 - [x] Phase 6 restart boundaries complete.
@@ -220,7 +220,7 @@ Current slice: Phase 8 complete; MVP hardening and live-environment validation r
 
 Scope:
 
-- Add dashboard counts for printers, rolling entries, sessions, preserved captures, detected events, and restart boundaries.
+- Add dashboard counts for printers, continuous watch entries, sessions, preserved captures, detected events, and restart boundaries.
 - Add storage visibility for SQLite database path, existence, and size where available.
 - Add diagnostics/settings API that exposes non-secret runtime configuration and trigger rule visibility.
 - Improve settings/diagnostics UI with backup/restore, Docker persistence, frontend cache, trusted LAN, and validation notes.
@@ -253,13 +253,13 @@ Out of scope for this slice:
 - 2026-06-07: Verified from official Moonraker docs that websocket connections receive server-generated gcode response events and JSON-RPC notifications.
 - 2026-06-07: Verified `notify_gcode_response`, `notify_status_update`, `notify_klippy_ready`, `notify_klippy_shutdown`, and `notify_klippy_disconnected` as initial Phase 2 ingestion sources.
 - 2026-06-07: Live Moonraker websocket ingestion is represented by a client shell and tested payload conversion; no live printer was available for end-to-end connection testing.
-- 2026-06-07: Started Phase 3 rolling console watch; current priority is background ingestion for watch-enabled printers plus retention pruning.
-- 2026-06-07: Added a background rolling watch manager that starts one websocket task per enabled watched printer and records supported Moonraker notifications.
-- 2026-06-07: Added rolling pruning for `console_entries` only; manual session and preserved capture copy tables remain untouched by pruning.
+- 2026-06-07: Started Phase 3 continuous console watch; current priority is background ingestion for watch-enabled printers plus retention pruning.
+- 2026-06-07: Added a background continuous watch manager that starts one websocket task per enabled watched printer and records supported Moonraker notifications.
+- 2026-06-07: Added continuous watch pruning for `console_entries` only; manual session and preserved capture copy tables remain untouched by pruning.
 - 2026-06-07: Added watch status and manual prune endpoints for observability and validation.
 - 2026-06-07: Started Phase 4 manual diagnostic sessions; current priority is active session recording with copied entry rows.
 - 2026-06-07: Implemented manual session start/stop/save/discard behavior and copied active-session entries from newly ingested console entries.
-- 2026-06-07: Saved manual sessions use copied rows in `manual_session_entries`, so they survive rolling pruning of `console_entries`.
+- 2026-06-07: Saved manual sessions use copied rows in `manual_session_entries`, so they survive continuous watch pruning of `console_entries`.
 - 2026-06-07: Started Phase 5 event-triggered preservation; current priority is explicit trigger rules and copied preserved capture rows.
 - 2026-06-07: Implemented explicit trigger rules for error-like console entries and Klippy state events.
 - 2026-06-07: Implemented detected events, preserved capture creation/extension, copied preserved entries, and trigger-entry marking.
@@ -268,7 +268,7 @@ Out of scope for this slice:
 - 2026-06-07: Added duplicate suppression for same-type printer boundaries within a reconnect-storm window.
 - 2026-06-07: Recent console and preserved capture timelines now expose boundary markers.
 - 2026-06-07: Started Phase 7 search and export; current priority is bounded global search and readable `.txt` exports.
-- 2026-06-07: Implemented bounded global search across rolling console entries, manual session copies, and preserved capture copies.
+- 2026-06-07: Implemented bounded global search across continuous watch console entries, manual session copies, and preserved capture copies.
 - 2026-06-07: Implemented `.txt` exports for filtered search results, manual sessions, and preserved captures.
 - 2026-06-08: Started Phase 8 polish, diagnostics, and storage visibility; current priority is dashboard/storage diagnostics plus final documentation.
 - 2026-06-08: Implemented Phase 8 diagnostics API with non-secret runtime settings, trigger rule visibility, storage metadata, and record counts.
@@ -305,12 +305,13 @@ Out of scope for this slice:
 - 2026-06-07: Implemented frontend printer management with create, edit, delete, retention selector, watch toggle, backend health, and local timestamp formatting.
 - 2026-06-07: Implemented Moonraker notification ingestion for gcode responses, Klippy state notifications, and selected status updates.
 - 2026-06-07: Implemented bounded recent console API and frontend console review page with mock notification ingestion.
-- 2026-06-07: Implemented rolling watch background manager, retention pruning, watch status/prune APIs, and live console watch status UI.
+- 2026-06-07: Implemented continuous watch background manager, retention pruning, watch status/prune APIs, and live console watch status UI.
 - 2026-06-07: Implemented manual diagnostic session APIs, active entry copying, session list/detail UI, and session filtering.
 - 2026-06-07: Implemented event-triggered preserved captures, detected events, capture detail API, and preserved capture review UI.
 - 2026-06-07: Implemented restart boundary detection, entry linkage, duplicate suppression, and UI boundary markers.
 - 2026-06-07: Implemented global search API/UI and text exports for search results, manual sessions, and preserved captures.
 - 2026-06-08: Implemented diagnostics API/UI, storage visibility, dashboard counts, and deployment notes for Phase 8 polish.
+- 2026-06-08: Renamed user-facing rolling watch language to continuous watch, extended retention options to 1 month, and stacked printer/session/live-console cards.
 
 ## Upcoming Commit Targets
 
@@ -358,8 +359,8 @@ Phase 0 validation status:
 - Live Moonraker websocket connectivity has not been end-to-end tested because no live printer is available in this environment.
 - The mock ingest endpoint is for Phase 2 validation and may be replaced or gated before broader deployment.
 - Phase 3 background watch behavior is validated at service/API level, not against a live Moonraker websocket.
-- Phase 4 manual sessions copy newly ingested entries only while active; they do not backfill older rolling entries from before the session start.
-- Phase 5 preservation copies entries currently present in rolling `console_entries`; if the rolling table was already pruned before a trigger, older pre-trigger context cannot be recovered.
+- Phase 4 manual sessions copy newly ingested entries only while active; they do not backfill older continuous watch entries from before the session start.
+- Phase 5 preservation copies entries currently present in continuous watch `console_entries`; if the continuous watch table was already pruned before a trigger, older pre-trigger context cannot be recovered.
 - Phase 6 boundary detection is rule-based and limited to explicit Klippy state notifications plus restart/disconnect/reconnect-like messages.
 - Phase 7 search/export is bounded by explicit limits; it is not a full unbounded archive dump.
 - Initial frontend build required an explicit Vite client type declaration for `import.meta.env`; this is now included in `frontend/src/vite-env.d.ts`.
@@ -421,7 +422,7 @@ Phase 4 validation status:
 - [x] Active session entry copying implemented.
 - [x] Session list/detail API implemented with bounded filters.
 - [x] Manual sessions frontend implemented.
-- [x] Saved session survives rolling pruning test passed.
+- [x] Saved session survives continuous watch pruning test passed.
 - [x] Backend import/compile check passed.
 - [x] Backend tests passed.
 - [x] Frontend production build passed.
@@ -440,7 +441,7 @@ Phase 5 validation status:
 - [x] Preserved entry copying and trigger marker implemented.
 - [x] Preserved captures list/detail API implemented.
 - [x] Preserved captures frontend implemented.
-- [x] Preservation survives rolling pruning test passed.
+- [x] Preservation survives continuous watch pruning test passed.
 - [x] Backend import/compile check passed.
 - [x] Backend tests passed.
 - [x] Frontend production build passed.

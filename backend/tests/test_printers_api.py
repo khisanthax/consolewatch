@@ -54,11 +54,11 @@ def test_printer_crud_round_trip():
 
         updated = client.put(
             f"/api/v1/printers/{printer_id}",
-            json={"name": "Voron Trident", "retention_hours": 12},
+            json={"name": "Voron Trident", "retention_hours": 720},
         )
         assert updated.status_code == 200
         assert updated.json()["name"] == "Voron Trident"
-        assert updated.json()["retention_hours"] == 12
+        assert updated.json()["retention_hours"] == 720
 
         deleted = client.delete(f"/api/v1/printers/{printer_id}")
         assert deleted.status_code == 204

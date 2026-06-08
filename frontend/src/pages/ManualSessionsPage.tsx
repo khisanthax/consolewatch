@@ -126,7 +126,7 @@ export default function ManualSessionsPage() {
         <h2>Manual diagnostic sessions</h2>
       </header>
 
-      <div className="split-layout sessions-layout">
+      <div className="stack-layout">
         <div className="panel form-panel">
           <h3>Start session</h3>
           <form className="form-panel nested-form" onSubmit={handleStart}>

@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 8 polish and diagnostics is implemented. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, rolling watch, manual sessions, rule-triggered preserved captures, restart/reconnect boundary markers, bounded global search, text exports, dashboard counts, and diagnostics/storage visibility.
+Phase 8 polish and diagnostics is implemented. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, continuous watch, manual sessions, rule-triggered preserved captures, restart/reconnect boundary markers, bounded global search, text exports, dashboard counts, and diagnostics/storage visibility.
 
 ## Planned Architecture
 
@@ -53,7 +53,7 @@ Defaults:
 
 Use the included `docker-compose.yml` as the stack file. Keep the `consolewatch_data` volume or replace it with a deliberate bind mount to a stable host path.
 
-Do not remove the volume unless you intend to delete all ConsoleWatch data. The SQLite database, saved sessions, preserved captures, and rolling entries will live there once implemented.
+Do not remove the volume unless you intend to delete all ConsoleWatch data. The SQLite database, saved sessions, preserved captures, and continuous watch entries live there.
 
 ## Backup and Restore
 
@@ -81,11 +81,11 @@ Verified from official Moonraker documentation:
 
 ConsoleWatch currently includes a Moonraker websocket client shell and a mock notification ingest endpoint for proof testing. A live printer connection was not available in this environment, so live websocket ingestion remains unverified locally. ConsoleWatch still does not assume full historical console backfill support.
 
-## Rolling Watch
+## Continuous Watch
 
-When `CONSOLEWATCH_BACKGROUND_WATCH_ENABLED=true`, the backend starts a rolling watch manager during FastAPI lifespan startup. It scans for printers where both `is_enabled` and `console_watch_enabled` are true, starts one websocket ingestion task per watched printer, records supported Moonraker notifications into `console_entries`, and updates printer connection status fields.
+When `CONSOLEWATCH_BACKGROUND_WATCH_ENABLED=true`, the backend starts the continuous watch manager during FastAPI lifespan startup. It scans for printers where both `is_enabled` and `console_watch_enabled` are true, starts one websocket ingestion task per watched printer, records supported Moonraker notifications into `console_entries`, and updates printer connection status fields.
 
-Rolling pruning deletes only rows in `console_entries` older than each watched printer's `retention_hours`. Saved manual-session copy rows and preserved-capture copy rows are separate tables and are not deleted by rolling pruning.
+Continuous watch pruning deletes only rows in `console_entries` older than each watched printer's `retention_hours`. Saved manual-session copy rows and preserved-capture copy rows are separate tables and are not deleted by continuous watch pruning. Printer retention can be set from 4 hours up to 1 month.
 
 Useful endpoints:
 
@@ -94,7 +94,7 @@ Useful endpoints:
 
 ## Manual Sessions
 
-Manual diagnostic sessions intentionally copy newly ingested console entries for the selected printer while a session is active. Copied rows live in `manual_session_entries`, so saved sessions survive rolling pruning of `console_entries`.
+Manual diagnostic sessions intentionally copy newly ingested console entries for the selected printer while a session is active. Copied rows live in `manual_session_entries`, so saved sessions survive continuous watch pruning of `console_entries`.
 
 Useful endpoints:
 
@@ -107,7 +107,7 @@ Useful endpoints:
 
 ## Preserved Captures
 
-Rule-triggered preservation creates a `preserved_console_captures` row when an error-like console entry or state event matches an explicit trigger rule. ConsoleWatch copies rolling entries from 30 minutes before the trigger through 30 minutes after the trigger into `preserved_console_entries`, marks the trigger entry, and records a `detected_events` row.
+Rule-triggered preservation creates a `preserved_console_captures` row when an error-like console entry or state event matches an explicit trigger rule. ConsoleWatch copies continuous watch entries from 30 minutes before the trigger through 30 minutes after the trigger into `preserved_console_entries`, marks the trigger entry, and records a `detected_events` row.
 
 If another trigger occurs during an active capture window for the same printer, the existing capture is extended instead of creating a duplicate capture.
 
@@ -124,7 +124,7 @@ Duplicate same-type boundaries for the same printer are suppressed within a shor
 
 ## Search and Export
 
-Global search queries rolling console entries, copied manual session entries, and copied preserved capture entries through one bounded result set. Filters include printer, text, classification, source, level, time range, and limit.
+Global search queries continuous watch console entries, copied manual session entries, and copied preserved capture entries through one bounded result set. Filters include printer, text, classification, source, level, time range, and limit.
 
 Useful endpoints:
 

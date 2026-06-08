@@ -28,6 +28,26 @@ const emptyForm: PrinterFormState = {
   retention_hours: 8
 };
 
+const retentionOptions = [
+  { value: 4, label: "4 hours" },
+  { value: 8, label: "8 hours" },
+  { value: 12, label: "12 hours" },
+  { value: 24, label: "1 day" },
+  { value: 48, label: "2 days" },
+  { value: 72, label: "3 days" },
+  { value: 168, label: "1 week" },
+  { value: 336, label: "2 weeks" },
+  { value: 720, label: "1 month" }
+];
+
+function formatRetention(hours: number) {
+  const option = retentionOptions.find((item) => item.value === hours);
+  if (option) {
+    return option.label;
+  }
+  return hours < 24 ? `${hours}h` : `${Math.round(hours / 24)} days`;
+}
+
 function formFromPrinter(printer: Printer): PrinterFormState {
   return {
     name: printer.name,
@@ -135,7 +155,7 @@ export default function PrintersPage() {
         <h2>Printer profiles</h2>
       </header>
 
-      <div className="split-layout">
+      <div className="stack-layout">
         <form className="panel form-panel" onSubmit={handleSubmit}>
           <h3>{editingId === null ? "Add printer" : "Edit printer"}</h3>
           <label>
@@ -175,10 +195,11 @@ export default function PrintersPage() {
                 setForm((current) => ({ ...current, retention_hours: Number(event.target.value) }))
               }
             >
-              <option value={4}>4 hours</option>
-              <option value={8}>8 hours</option>
-              <option value={12}>12 hours</option>
-              <option value={24}>24 hours</option>
+              {retentionOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </label>
           <div className="toggle-row">
@@ -198,7 +219,7 @@ export default function PrintersPage() {
                   setForm((current) => ({ ...current, console_watch_enabled: event.target.checked }))
                 }
               />
-              <span>Rolling watch</span>
+              <span>Continuous watch</span>
             </label>
           </div>
           <div className="button-row">
@@ -231,7 +252,7 @@ export default function PrintersPage() {
                     <th>Name</th>
                     <th>Moonraker</th>
                     <th>Status</th>
-                    <th>Watch</th>
+                    <th>Continuous watch</th>
                     <th>Updated</th>
                     <th>Actions</th>
                   </tr>
@@ -248,7 +269,7 @@ export default function PrintersPage() {
                         <span className="pill">{printer.connection_status}</span>
                         <small>Last connected {formatOptionalLocalDateTime(printer.last_connected_at)}</small>
                       </td>
-                      <td>{printer.console_watch_enabled ? `${printer.retention_hours}h` : "Off"}</td>
+                      <td>{printer.console_watch_enabled ? formatRetention(printer.retention_hours) : "Off"}</td>
                       <td>{formatLocalDateTime(printer.updated_at)}</td>
                       <td>
                         <div className="row-actions">

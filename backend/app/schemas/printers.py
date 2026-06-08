@@ -10,7 +10,7 @@ class PrinterBase(BaseModel):
     base_url: HttpUrl
     is_enabled: bool = True
     console_watch_enabled: bool = False
-    retention_hours: int = Field(default=8, ge=4, le=24)
+    retention_hours: int = Field(default=8, ge=4, le=720)
 
 
 class PrinterCreate(PrinterBase):
@@ -23,7 +23,7 @@ class PrinterUpdate(BaseModel):
     api_key: str | None = Field(default=None, max_length=4096)
     is_enabled: bool | None = None
     console_watch_enabled: bool | None = None
-    retention_hours: int | None = Field(default=None, ge=4, le=24)
+    retention_hours: int | None = Field(default=None, ge=4, le=720)
 
 
 class PrinterRead(PrinterBase):

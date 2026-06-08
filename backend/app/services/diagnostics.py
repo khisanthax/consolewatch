@@ -47,7 +47,7 @@ def get_diagnostics(db: Session) -> DiagnosticsRead:
         notes=[
             "Moonraker API keys are intentionally excluded from diagnostics.",
             "SQLite file size is shown only when the configured SQLite path is visible to the backend process.",
-            "Rolling pruning only deletes console_entries; copied manual sessions and preserved captures remain separate.",
+            "Continuous watch pruning only deletes console_entries; copied manual sessions and preserved captures remain separate.",
         ],
     )
 

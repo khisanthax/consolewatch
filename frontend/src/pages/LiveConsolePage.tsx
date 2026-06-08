@@ -129,11 +129,11 @@ export default function LiveConsolePage() {
     setError(null);
     try {
       const result = await pruneWatchEntries();
-      setLastPruneResult(`Deleted ${result.deleted_total} rolling entries`);
+      setLastPruneResult(`Deleted ${result.deleted_total} continuous watch entries`);
       await refreshEntries();
       await refreshWatchStatus();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to prune rolling entries");
+      setError(err instanceof Error ? err.message : "Failed to prune continuous watch entries");
     }
   }
 
@@ -141,13 +141,13 @@ export default function LiveConsolePage() {
     <section className="page">
       <header>
         <p className="eyebrow">Live Console</p>
-        <h2>Rolling console watch</h2>
+        <h2>Continuous console watch</h2>
       </header>
 
-      <div className="split-layout console-layout">
-        <div className="panel form-panel">
+      <div className="stack-layout console-layout">
+        <div className="panel">
           <div className="watch-summary">
-            <h3>Rolling watch</h3>
+            <h3>Continuous watch</h3>
             <dl>
               <div>
                 <dt>Worker</dt>
@@ -177,6 +177,56 @@ export default function LiveConsolePage() {
             </button>
             {lastPruneResult && <p>{lastPruneResult}</p>}
           </div>
+        </div>
+
+        <div className="panel table-panel">
+          <div className="panel-heading">
+            <h3>Recent entries</h3>
+            <button type="button" className="secondary-button" onClick={() => void refreshEntries()}>
+              Refresh
+            </button>
+          </div>
+          {isLoading && <p>Loading console entries...</p>}
+          {!isLoading && entries.length === 0 && <p>No console entries found.</p>}
+          {!isLoading && entries.length > 0 && (
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Level</th>
+                    <th>Source</th>
+                    <th>Classification</th>
+                    <th>Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entries.map((entry) => (
+                    <tr key={entry.id} className={entry.boundary_type ? "boundary-row" : undefined}>
+                      <td>{formatLocalDateTime(entry.captured_at)}</td>
+                      <td>
+                        <span className={`pill level-${entry.level}`}>{entry.level}</span>
+                      </td>
+                      <td>{entry.source}</td>
+                      <td>{entry.classification}</td>
+                      <td className="message-cell">
+                        {entry.message}
+                        {(entry.event_type || entry.filename) && (
+                          <small>
+                            {[entry.event_type, entry.filename].filter(Boolean).join(" / ")}
+                          </small>
+                        )}
+                        {entry.boundary_type && <small>Boundary: {entry.boundary_type}</small>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <div className="panel form-panel">
           <h3>Filters</h3>
           <form className="form-panel nested-form" onSubmit={handleSearch}>
             <label>
@@ -251,53 +301,6 @@ export default function LiveConsolePage() {
             <button type="submit">Ingest Mock</button>
           </form>
           {error && <p className="error-text">{error}</p>}
-        </div>
-
-        <div className="panel table-panel">
-          <div className="panel-heading">
-            <h3>Recent entries</h3>
-            <button type="button" className="secondary-button" onClick={() => void refreshEntries()}>
-              Refresh
-            </button>
-          </div>
-          {isLoading && <p>Loading console entries...</p>}
-          {!isLoading && entries.length === 0 && <p>No console entries found.</p>}
-          {!isLoading && entries.length > 0 && (
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Level</th>
-                    <th>Source</th>
-                    <th>Classification</th>
-                    <th>Message</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {entries.map((entry) => (
-                    <tr key={entry.id} className={entry.boundary_type ? "boundary-row" : undefined}>
-                      <td>{formatLocalDateTime(entry.captured_at)}</td>
-                      <td>
-                        <span className={`pill level-${entry.level}`}>{entry.level}</span>
-                      </td>
-                      <td>{entry.source}</td>
-                      <td>{entry.classification}</td>
-                      <td className="message-cell">
-                        {entry.message}
-                        {(entry.event_type || entry.filename) && (
-                          <small>
-                            {[entry.event_type, entry.filename].filter(Boolean).join(" / ")}
-                          </small>
-                        )}
-                        {entry.boundary_type && <small>Boundary: {entry.boundary_type}</small>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
         </div>
       </div>
     </section>

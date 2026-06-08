@@ -65,7 +65,7 @@ export default function SettingsPage() {
               <dd>{diagnostics?.runtime.environment ?? "Unknown"}</dd>
             </div>
             <div>
-              <dt>Background watch</dt>
+              <dt>Continuous watch worker</dt>
               <dd>{diagnostics?.runtime.background_watch_enabled ? "Enabled" : "Disabled"}</dd>
             </div>
             <div>
