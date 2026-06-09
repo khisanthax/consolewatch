@@ -72,7 +72,7 @@ export default function DashboardPage() {
               <dd>{diagnostics?.counts.manual_log_sessions ?? 0}</dd>
             </div>
             <div>
-              <dt>Preserved captures</dt>
+              <dt>Incident captures</dt>
               <dd>{diagnostics?.counts.preserved_console_captures ?? 0}</dd>
             </div>
             <div>

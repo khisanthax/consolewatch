@@ -213,6 +213,19 @@ textarea {
   width: auto;
 }
 
+.inline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  color: #3b473f;
+  font-weight: 700;
+}
+
+.inline-toggle input {
+  width: auto;
+}
+
 .button-row,
 .row-actions {
   display: flex;

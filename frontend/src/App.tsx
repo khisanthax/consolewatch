@@ -1,5 +1,6 @@
 import { Link, Route, Routes } from "react-router-dom";
 
+import ConsoleHistoryPage from "./pages/ConsoleHistoryPage";
 import DashboardPage from "./pages/DashboardPage";
 import LiveConsolePage from "./pages/LiveConsolePage";
 import ManualSessionsPage from "./pages/ManualSessionsPage";
@@ -12,8 +13,9 @@ const navItems = [
   { to: "/", label: "Dashboard" },
   { to: "/printers", label: "Printers" },
   { to: "/live", label: "Live Console" },
-  { to: "/sessions", label: "Sessions" },
-  { to: "/captures", label: "Captures" },
+  { to: "/history", label: "Console History" },
+  { to: "/sessions", label: "Manual Sessions" },
+  { to: "/captures", label: "Incident Captures" },
   { to: "/search", label: "Search" },
   { to: "/settings", label: "Settings" }
 ];
@@ -39,6 +41,7 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/printers" element={<PrintersPage />} />
           <Route path="/live" element={<LiveConsolePage />} />
+          <Route path="/history" element={<ConsoleHistoryPage />} />
           <Route path="/sessions" element={<ManualSessionsPage />} />
           <Route path="/captures" element={<PreservedCapturesPage />} />
           <Route path="/search" element={<SearchPage />} />

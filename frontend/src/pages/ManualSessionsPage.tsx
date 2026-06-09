@@ -122,7 +122,7 @@ export default function ManualSessionsPage() {
   return (
     <section className="page">
       <header>
-        <p className="eyebrow">Sessions</p>
+        <p className="eyebrow">Manual Sessions</p>
         <h2>Manual diagnostic sessions</h2>
       </header>
 
@@ -160,7 +160,7 @@ export default function ManualSessionsPage() {
 
         <div className="panel table-panel">
           <div className="panel-heading">
-            <h3>Sessions</h3>
+            <h3>Manual sessions</h3>
             <button type="button" className="secondary-button" onClick={() => void refreshSessions()}>
               Refresh
             </button>

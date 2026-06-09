@@ -6,7 +6,7 @@ The roadmap in [docs/ROADMAP.md](docs/ROADMAP.md) is the source of truth for sco
 
 ## Current Status
 
-Phase 8 polish and diagnostics is implemented. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, continuous watch, manual sessions, rule-triggered preserved captures, restart/reconnect boundary markers, bounded global search, text exports, dashboard counts, and diagnostics/storage visibility.
+Phase 8 polish and diagnostics is implemented. The repo currently contains the roadmap, Docker Compose skeleton, FastAPI backend, React/Vite frontend, SQLite table bootstrap, printer profile CRUD API, Moonraker notification-to-entry ingestion, continuous watch, console history, manual sessions, rule-triggered incident captures, restart/reconnect boundary markers, bounded global search, text exports, dashboard counts, and diagnostics/storage visibility.
 
 ## Planned Architecture
 
@@ -87,6 +87,8 @@ When `CONSOLEWATCH_BACKGROUND_WATCH_ENABLED=true`, the backend starts the contin
 
 Continuous watch pruning deletes only rows in `console_entries` older than each watched printer's `retention_hours`. Saved manual-session copy rows and preserved-capture copy rows are separate tables and are not deleted by continuous watch pruning. Printer retention can be set from 4 hours up to 1 month.
 
+Use **Live Console** for what is happening now. Use **Console History** to review retained continuous watch entries from the SQLite database.
+
 Useful endpoints:
 
 - `GET /api/v1/watch/status`
@@ -105,9 +107,9 @@ Useful endpoints:
 - `POST /api/v1/sessions/{session_id}/save`
 - `DELETE /api/v1/sessions/{session_id}`
 
-## Preserved Captures
+## Incident Captures
 
-Rule-triggered preservation creates a `preserved_console_captures` row when an error-like console entry or state event matches an explicit trigger rule. ConsoleWatch copies continuous watch entries from 30 minutes before the trigger through 30 minutes after the trigger into `preserved_console_entries`, marks the trigger entry, and records a `detected_events` row.
+Incident captures are automatic saved snapshots around important events. Rule-triggered preservation creates a `preserved_console_captures` row when an error-like console entry or state event matches an explicit trigger rule. ConsoleWatch copies continuous watch entries from 30 minutes before the trigger through 30 minutes after the trigger into `preserved_console_entries`, marks the trigger entry, and records a `detected_events` row.
 
 If another trigger occurs during an active capture window for the same printer, the existing capture is extended instead of creating a duplicate capture.
 

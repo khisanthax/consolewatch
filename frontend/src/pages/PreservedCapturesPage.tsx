@@ -75,9 +75,17 @@ export default function PreservedCapturesPage() {
   return (
     <section className="page">
       <header>
-        <p className="eyebrow">Captures</p>
-        <h2>Preserved incidents</h2>
+        <p className="eyebrow">Incident Captures</p>
+        <h2>Preserved fault and restart windows</h2>
       </header>
+
+      <div className="panel">
+        <p>
+          Incident captures are automatic saved snapshots around important events. When ConsoleWatch sees a fault,
+          shutdown, disconnect, reconnect, or restart marker, it copies the surrounding continuous watch entries so
+          that incident survives normal retention pruning.
+        </p>
+      </div>
 
       <div className="split-layout sessions-layout">
         <div className="panel form-panel">
@@ -94,14 +102,14 @@ export default function PreservedCapturesPage() {
             </select>
           </label>
           <button type="button" className="secondary-button" onClick={() => void refreshCaptures()}>
-            Refresh Captures
+            Refresh Incident Captures
           </button>
           {error && <p className="error-text">{error}</p>}
         </div>
 
         <div className="panel table-panel">
           <div className="panel-heading">
-            <h3>Preserved captures</h3>
+            <h3>Incident captures</h3>
             <span className="pill">{captures.length}</span>
           </div>
           {isLoading && <p>Loading captures...</p>}

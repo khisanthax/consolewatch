@@ -36,7 +36,7 @@ Intentional user recording. A user can start and stop a session, label it, add n
 
 ### Event-Preserved Incident Capture
 
-Automatic fault capture. Rule-based triggers preserve entries around an important message or state transition, including a visible trigger point. Preserved captures survive continuous watch pruning.
+Automatic fault capture. Rule-based triggers preserve entries around an important message or state transition, including a visible trigger point. Incident captures survive continuous watch pruning.
 
 ### Restart / Boundary Timeline
 
@@ -60,7 +60,7 @@ ConsoleWatch marks restart and reconnect boundaries such as Klippy disconnected,
 - Routing-ready app shell.
 - API helper with configurable base URL.
 - Browser-local timezone formatting helper.
-- Pages planned for dashboard, printers, live console watch, manual sessions, preserved captures, capture detail, global search, and settings/diagnostics.
+- Pages planned for dashboard, printers, live console, console history, manual sessions, incident captures, capture detail, global search, and settings/diagnostics.
 
 ### Deployment
 
@@ -171,7 +171,7 @@ Definition of done:
 - Preserve 30 minutes before trigger and continue 30 minutes after.
 - Extend captures when another trigger occurs during the post-window.
 - Preserve copied capture rows that survive pruning.
-- Preserved captures list and detail pages.
+- Incident captures list and detail pages.
 - Trigger marker in console timeline.
 
 ### Phase 6: Restart and Firmware Boundary Handling
@@ -312,6 +312,7 @@ Out of scope for this slice:
 - 2026-06-07: Implemented global search API/UI and text exports for search results, manual sessions, and preserved captures.
 - 2026-06-08: Implemented diagnostics API/UI, storage visibility, dashboard counts, and deployment notes for Phase 8 polish.
 - 2026-06-08: Renamed user-facing rolling watch language to continuous watch, extended retention options to 1 month, and stacked printer/session/live-console cards.
+- 2026-06-09: Split Live Console from retained Console History, renamed Sessions to Manual Sessions, and clarified Captures as Incident Captures.
 
 ## Upcoming Commit Targets
 
@@ -439,8 +440,8 @@ Phase 5 validation status:
 - [x] Detected events writes implemented.
 - [x] Preserved capture create/extend behavior implemented.
 - [x] Preserved entry copying and trigger marker implemented.
-- [x] Preserved captures list/detail API implemented.
-- [x] Preserved captures frontend implemented.
+- [x] Incident captures list/detail API implemented.
+- [x] Incident captures frontend implemented.
 - [x] Preservation survives continuous watch pruning test passed.
 - [x] Backend import/compile check passed.
 - [x] Backend tests passed.
